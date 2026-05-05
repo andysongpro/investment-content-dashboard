@@ -13,7 +13,7 @@ const assert = require('assert');
   assert.equal(errors.length,0,errors.join('\n'));
   assert.equal(failures.length,0,failures.join('\n'));
   const body=await page.locator('body').innerText();
-  for(const text of ['요약','리그','리포트','종목','요청','성과','후보','리뷰','투자 콘텐츠','인텔리전스 허브','추천일 종가 대비 최신가 성과','League Score v0.1','주간 투자 콘텐츠 리포트','종목별 추천 타임라인','이 채널도 분석해주세요']) assert(body.includes(text), text);
+  for(const text of ['요약','리그','리포트','종목','요청','성과','후보','검수','투자 콘텐츠','인텔리전스 허브','추천일 종가 대비 최신가 성과','League Score v0.1','주간 투자 콘텐츠 리포트','종목별 추천 타임라인','이 채널도 분석해주세요']) assert(body.includes(text), text);
 
   const overflow = await page.evaluate(() => {
     const vw = document.documentElement.clientWidth;
@@ -34,19 +34,22 @@ const assert = require('assert');
     topKpis: getComputedStyle(document.querySelector('main > section.kpi')).gridTemplateColumns.split(' ').length,
     heroKpis: getComputedStyle(document.querySelector('.hero .grid-3')).gridTemplateColumns.split(' ').length,
     timeline: getComputedStyle(document.querySelector('.timeline')).gridTemplateColumns.split(' ').length,
-    performance: getComputedStyle(document.querySelector('#performance-board .grid-4')).gridTemplateColumns.split(' ').length,
+    performance: getComputedStyle(document.querySelector('#performance-board .performance-card-grid')).gridTemplateColumns.split(' ').length,
     report: getComputedStyle(document.querySelector('#weekly-report .report-grid')).gridTemplateColumns.split(' ').length,
   }));
-  assert.deepEqual(mobileGrids, { topKpis: 2, heroKpis: 3, timeline: 2, performance: 2, report: 3 });
+  assert.deepEqual(mobileGrids, { topKpis: 2, heroKpis: 3, timeline: 2, performance: 1, report: 3 });
 
   const persistentNav = await page.evaluate(async () => {
+    const header = document.querySelector('.mobile-global-header');
     const nav = document.querySelector('.mobile-sticky-nav');
     window.scrollTo(0, document.documentElement.scrollHeight);
     await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-    const rect = nav.getBoundingClientRect();
-    const style = getComputedStyle(nav);
+    const rect = header.getBoundingClientRect();
+    const style = getComputedStyle(header);
+    const navStyle = getComputedStyle(nav);
     return {
       position: style.position,
+      navDisplay: navStyle.display,
       visible: rect.width > 0 && rect.height > 0,
       top: Math.round(rect.top),
       bottom: Math.round(rect.bottom),

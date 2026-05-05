@@ -25,7 +25,7 @@ async function runViewport(browser, name, viewport, screenshotPath) {
   }
 
   if (viewport.width <= 560) {
-    for (const text of ['요약', '소스', '성과', '후보', '리뷰']) assert(body.includes(text), `${name}: missing mobile nav ${text}`);
+    for (const text of ['요약', '성과', '리그', '리포트', '종목', '검수']) assert(body.includes(text), `${name}: missing mobile nav ${text}`);
     const navDisplay = await page.locator('.mobile-sticky-nav').evaluate(el => getComputedStyle(el).display);
     assert.notEqual(navDisplay, 'none', `${name}: mobile sticky nav hidden`);
   }

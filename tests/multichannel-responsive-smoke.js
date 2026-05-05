@@ -44,9 +44,9 @@ const assert = require('assert');
       const mobileGrids = await page.evaluate(() => ({
         topKpis: getComputedStyle(document.querySelector('main > section.kpi')).gridTemplateColumns.split(' ').length,
         timeline: getComputedStyle(document.querySelector('.timeline')).gridTemplateColumns.split(' ').length,
-        performance: getComputedStyle(document.querySelector('#performance-board .grid-4')).gridTemplateColumns.split(' ').length,
+        performance: getComputedStyle(document.querySelector('#performance-board .performance-card-grid')).gridTemplateColumns.split(' ').length,
       }));
-      assert.deepEqual(mobileGrids, { topKpis: 2, timeline: 2, performance: 2 }, `${name} mobile grids ${JSON.stringify(mobileGrids)}`);
+      assert.deepEqual(mobileGrids, { topKpis: 2, timeline: 2, performance: 1 }, `${name} mobile grids ${JSON.stringify(mobileGrids)}`);
       const touchIssues = await page.evaluate(() => Array.from(document.querySelectorAll('button, a, input, select')).filter(el => {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && r.height < 36;

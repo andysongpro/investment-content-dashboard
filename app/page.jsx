@@ -222,14 +222,23 @@ export default function Page() {
 
   return (
     <main id="top" className="container mobile-compact">
-      <nav className="mobile-sticky-nav" aria-label="모바일 섹션 바로가기">
-        <a href="#top">요약</a>
-        <a href="#league-board">리그</a>
-        <a href="#weekly-report">리포트</a>
-        <a href="#asset-timeline">종목</a>
-        <a href="#channel-request">요청</a>
-        <a href="#review-queue">리뷰</a>
-      </nav>
+      <header className="mobile-global-header" aria-label="모바일 글로벌 메뉴">
+        <div className="mobile-appbar">
+          <a className="mobile-brand" href="#top" aria-label="투자 콘텐츠 인텔리전스 허브 홈으로 이동">
+            <span className="mobile-brand-mark">I</span>
+            <span><strong>콘텐츠 검증</strong><small>Investment OS</small></span>
+          </a>
+          <a className="mobile-appbar-cta" href="#channel-request">채널 요청</a>
+        </div>
+        <nav className="mobile-sticky-nav" aria-label="모바일 섹션 바로가기">
+          <a href="#top">요약</a>
+          <a href="#performance-board">성과</a>
+          <a href="#league-board">리그</a>
+          <a href="#weekly-report">리포트</a>
+          <a href="#asset-timeline">종목</a>
+          <a href="#review-queue">검수</a>
+        </nav>
+      </header>
       <section className="hero panel panel-strong block">
         <div className="stack">
           <div className="row">
@@ -461,7 +470,7 @@ function PerformanceSummaryCard({ item, featured, channelLabel }) {
 
     <div className="price-journey" aria-label="추천일 가격과 현재 가격 비교">
       <div><span>추천일</span><strong>{formatWon(item.recClose)}</strong><small>{item.date}</small></div>
-      <span className="journey-arrow">────▶</span>
+      <span className="journey-arrow">→</span>
       <div><span>현재</span><strong>{formatWon(item.latest)}</strong><small>{item.latestDate}</small></div>
     </div>
 

@@ -48,14 +48,16 @@ const url = 'https://investment-content-dashboard.vercel.app/';
         timeline: getComputedStyle(document.querySelector('.timeline')).gridTemplateColumns.split(' ').length,
         performance: getComputedStyle(document.querySelector('#performance-board .performance-card-grid')).gridTemplateColumns.split(' ').length,
       }));
-      assert.deepEqual(mobileGrids, { topKpis: 2, timeline: 2, performance: 2 }, `${name} mobile grids ${JSON.stringify(mobileGrids)}`);
+      assert.deepEqual(mobileGrids, { topKpis: 2, timeline: 2, performance: 1 }, `${name} mobile grids ${JSON.stringify(mobileGrids)}`);
       const persistentNav = await page.evaluate(async () => {
+        const header = document.querySelector('.mobile-global-header');
         const nav = document.querySelector('.mobile-sticky-nav');
         window.scrollTo(0, document.documentElement.scrollHeight);
         await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-        const rect = nav.getBoundingClientRect();
-        const style = getComputedStyle(nav);
-        return { position: style.position, visible: rect.width > 0 && rect.height > 0, top: Math.round(rect.top), bottom: Math.round(rect.bottom), viewportHeight: window.innerHeight };
+        const rect = header.getBoundingClientRect();
+        const style = getComputedStyle(header);
+        const navStyle = getComputedStyle(nav);
+        return { position: style.position, navDisplay: navStyle.display, visible: rect.width > 0 && rect.height > 0, top: Math.round(rect.top), bottom: Math.round(rect.bottom), viewportHeight: window.innerHeight };
       });
       assert.equal(persistentNav.position, 'fixed', `${name} mobile global nav should be fixed ${JSON.stringify(persistentNav)}`);
       assert(persistentNav.visible && persistentNav.top >= 0 && persistentNav.bottom <= persistentNav.viewportHeight, `${name} mobile global nav disappeared ${JSON.stringify(persistentNav)}`);

@@ -71,7 +71,7 @@ test('mobile optimization includes sticky navigation, safe wrapping, and touch t
   assert(app.includes('mobile-sticky-nav'));
   assert(app.includes('요약'));
   assert(app.includes('후보'));
-  assert(app.includes('리뷰'));
+  assert(app.includes('검수'));
   assert(css.includes('overflow-wrap: anywhere'));
   assert(css.includes('min-height: 44px'));
   assert(css.includes('position: sticky'));
