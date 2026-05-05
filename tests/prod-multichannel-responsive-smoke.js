@@ -46,7 +46,7 @@ const url = 'https://investment-content-dashboard.vercel.app/';
       const mobileGrids = await page.evaluate(() => ({
         topKpis: getComputedStyle(document.querySelector('main > section.kpi')).gridTemplateColumns.split(' ').length,
         timeline: getComputedStyle(document.querySelector('.timeline')).gridTemplateColumns.split(' ').length,
-        performance: getComputedStyle(document.querySelector('#performance-board .grid-4')).gridTemplateColumns.split(' ').length,
+        performance: getComputedStyle(document.querySelector('#performance-board .performance-card-grid')).gridTemplateColumns.split(' ').length,
       }));
       assert.deepEqual(mobileGrids, { topKpis: 2, timeline: 2, performance: 2 }, `${name} mobile grids ${JSON.stringify(mobileGrids)}`);
       const persistentNav = await page.evaluate(async () => {
