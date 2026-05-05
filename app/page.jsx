@@ -470,12 +470,15 @@ function PerformanceSummaryCard({ item, featured, channelLabel }) {
       <strong className={positive ? 'positive' : 'negative'}>{positive ? '+' : ''}{rate.toFixed(2)}%</strong>
     </div>
 
-    <div className="performance-source">
-      <span className="label">근거 콘텐츠</span>
-      <p>{item.title}</p>
-      <small>{item.source}</small>
-    </div>
-    <p className="card-disclaimer">공개 콘텐츠 발언 기준 · 투자 권유가 아닙니다.</p>
+    <details className="performance-detail">
+      <summary>근거/기준 보기</summary>
+      <div className="performance-source">
+        <span className="label">근거 콘텐츠</span>
+        <p>{item.title}</p>
+        <small>{item.source}</small>
+      </div>
+      <p className="card-disclaimer">공개 콘텐츠 발언 기준 · 투자 권유가 아닙니다.</p>
+    </details>
   </article>;
 }
 

@@ -147,6 +147,10 @@ p { line-height: 1.68; }
 .performance-price-line { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .performance-source { display: grid; gap: 4px; }
 .performance-source p { margin: 0; color: var(--text); font-weight: 800; }
+.performance-detail { display: grid; gap: 8px; }
+.performance-detail summary { min-height: 32px; display: flex; align-items: center; color: var(--accent); font-size: 12px; font-weight: 950; cursor: pointer; list-style-position: inside; }
+.performance-detail[open] { padding-top: 2px; }
+.performance-detail[open] .performance-source { margin-top: 4px; }
 .card-disclaimer { margin: 0; }
 
 .mobile-sticky-nav { display: none; }
@@ -560,6 +564,9 @@ p { line-height: 1.68; }
   .mobile-compact .price-journey small,
   .mobile-compact .performance-price-line span,
   .mobile-compact .performance-source small,
+  .mobile-compact .performance-detail summary,
   .mobile-compact .card-disclaimer { font-size: 10.5px; }
+  .mobile-compact .performance-detail:not([open]) { margin-top: -2px; }
+  .mobile-compact .performance-detail summary { min-height: 28px; }
   .mobile-compact .journey-arrow { font-size: 11px; }
 }
