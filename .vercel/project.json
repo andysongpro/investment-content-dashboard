@@ -1,0 +1,16 @@
+{
+  "projectId": "prj_le4TjhFCeiCydAnFHeImRy2yXFj6",
+  "orgId": "team_yKjnbiE44CH3wFtSohcEgfR2",
+  "projectName": "investment-content-dashboard",
+  "settings": {
+    "createdAt": 1777879480228,
+    "framework": "nextjs",
+    "devCommand": null,
+    "installCommand": null,
+    "buildCommand": null,
+    "outputDirectory": null,
+    "rootDirectory": null,
+    "directoryListing": false,
+    "nodeVersion": "24.x"
+  }
+}

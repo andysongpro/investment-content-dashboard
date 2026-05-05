@@ -1,0 +1,20 @@
+{
+  "name": "investment-content-dashboard",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "start": "npx serve@latest out --listen 3000",
+    "test": "node tests/smoke.js && node tests/league-scoring.test.js && node tests/admin-ops.test.js",
+    "test:admin": "node tests/admin-ops.test.js && node tests/admin-smoke.js",
+    "scrape:seed": "node scripts/scrape-youtube-seed.js"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "playwright": "1.59.1"
+  }
+}
