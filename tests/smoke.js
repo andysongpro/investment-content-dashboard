@@ -108,26 +108,26 @@ test('mobile compact mode shortens labels, reduces spacing, and hides nonessenti
   }
 });
 
-test('Toss-inspired design tokens are applied to shared UI surfaces', () => {
+test('Revolut-inspired design tokens are applied to shared UI surfaces', () => {
   const css = read('app/globals.css');
   for (const token of [
-    '--bg: #f7f9fc',
+    '--bg: #ffffff',
     '--panel: #ffffff',
-    '--text: #191f28',
-    '--accent: #3182f6',
-    '--toss-blue: #3182f6',
-    '--toss-gray-50: #f9fafb',
-    '--toss-gray-100: #f2f4f6',
-    '--radius-xl: 28px',
-    '--shadow-card: 0 18px 48px rgba(49, 130, 246, .10)',
-    'background: linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%)',
-    'box-shadow: var(--shadow-card)',
+    '--text: #191c1f',
+    '--accent: #494fdf',
+    '--revolut-blue: #494fdf',
+    '--revolut-surface: #f4f4f4',
+    '--revolut-gray-100: #f4f4f4',
+    '--radius-xl: 24px',
+    '--shadow-card: none',
+    'background: #ffffff',
+    'box-shadow: none',
   ]) {
-    assert(css.includes(token), `missing Toss style token ${token}`);
+    assert(css.includes(token), `missing Revolut style token ${token}`);
   }
-  assert(css.includes('.btn { border: 0; background: var(--accent); color: #fff;'));
+  assert(css.includes('.btn { border: 0; background: var(--text); color: #fff;'));
+  assert(css.includes('border-radius: 9999px'));
   assert(css.includes('.chip, .status-chip {'));
-  assert(css.includes('border: 0;'));
 });
 
 test('PMF League OS sections, fixtures, and guardrails are present', () => {
