@@ -54,6 +54,17 @@ test('performance board explains GOOD/FLAT/MISS and data basis', () => {
   assert(app.includes('데이터 출처'));
 });
 
+test('performance board uses numeric summary card information design', () => {
+  const app = read('app/page.jsx');
+  const css = read('app/globals.css');
+  for (const text of ['PerformanceSummaryCard', 'performance-summary-card', 'performance-headline', 'price-journey', '추천일 종가 대비', '추천일', '현재', '근거 콘텐츠']) {
+    assert(app.includes(text), `missing performance card information design ${text}`);
+  }
+  for (const text of ['performance-list-row', 'performance-price-line', 'mini-ascii-rule', 'card-disclaimer']) {
+    assert(css.includes(text), `missing performance card CSS ${text}`);
+  }
+});
+
 test('mobile optimization includes sticky navigation, safe wrapping, and touch targets', () => {
   const css = read('app/globals.css');
   const app = read('app/page.jsx');

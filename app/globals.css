@@ -122,6 +122,32 @@ p { line-height: 1.68; }
 .evidence-box a { display: inline-flex; align-items: center; min-height: 44px; }
 .request-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) auto; gap: 12px; align-items: end; }
 .request-list { display: grid; gap: 10px; }
+.performance-card-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.performance-summary-card {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(25, 31, 40, .04);
+}
+.performance-summary-card.featured { border-color: #d6e9ff; background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%); }
+.performance-list-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.performance-headline { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.performance-headline strong { font-size: 34px; line-height: 1; letter-spacing: -.06em; }
+.performance-headline span { font-weight: 950; white-space: nowrap; }
+.mini-ascii-rule { height: 7px; border-radius: 999px; background: var(--toss-gray-100); overflow: hidden; }
+.mini-ascii-rule span { display: block; width: 58%; height: 100%; border-radius: inherit; background: repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 14px); }
+.price-journey { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: center; padding: 10px; border-radius: 16px; background: var(--toss-gray-50); }
+.price-journey div { display: grid; gap: 3px; }
+.price-journey span, .price-journey small, .performance-price-line span, .performance-source small, .card-disclaimer { color: var(--muted); font-size: 12px; font-weight: 800; }
+.price-journey strong { font-size: 17px; letter-spacing: -.03em; white-space: nowrap; }
+.journey-arrow { color: var(--dim); font-weight: 900; letter-spacing: -.08em; }
+.performance-price-line { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.performance-source { display: grid; gap: 4px; }
+.performance-source p { margin: 0; color: var(--text); font-weight: 800; }
+.card-disclaimer { margin: 0; }
 
 .mobile-sticky-nav { display: none; }
 .mobile-only { display: none; }
@@ -304,7 +330,7 @@ p { line-height: 1.68; }
   .hero, .grid-2, .admin-deck-layout { grid-template-columns: 1fr; }
   .admin-step-rail { display: none; }
   .admin-mobile-jump { display: flex; }
-  .timeline, .grid-4, .grid-3, .kpi, .report-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .timeline, .grid-4, .grid-3, .kpi, .report-grid, .performance-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .equal-grid, .request-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
@@ -347,7 +373,7 @@ p { line-height: 1.68; }
   .panel { border-radius: 20px; }
   .block { padding: 16px; }
   .card { padding: 16px; border-radius: 18px; }
-  .hero, .timeline, .grid-4, .grid-3, .grid-2, .kpi, .equal-grid, .league-grid, .movement-grid, .report-grid, .request-grid, .share-box { grid-template-columns: 1fr; }
+  .hero, .timeline, .grid-4, .grid-3, .grid-2, .kpi, .equal-grid, .league-grid, .movement-grid, .report-grid, .request-grid, .share-box, .performance-card-grid { grid-template-columns: 1fr; }
   .row { gap: 8px; }
   .between { display: grid; grid-template-columns: 1fr; gap: 10px; }
   h1 { font-size: 40px; line-height: 1.08; letter-spacing: -.055em; }
@@ -490,11 +516,13 @@ p { line-height: 1.68; }
   .mobile-compact .league-grid,
   .mobile-compact .movement-grid,
   .mobile-compact .report-grid,
+  .mobile-compact .performance-card-grid,
   .mobile-compact .equal-grid { gap: 8px; }
   .mobile-compact .kpi,
   .mobile-compact .admin-kpi,
   .mobile-compact .timeline,
   .mobile-compact .grid-4,
+  .mobile-compact .performance-card-grid,
   .mobile-compact .league-grid,
   .mobile-compact .equal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .mobile-compact .hero .grid-3,
@@ -519,4 +547,19 @@ p { line-height: 1.68; }
     margin-top: 14px;
     box-shadow: 0 0 0 4px rgba(49, 130, 246, .12);
   }
+  .mobile-compact .performance-summary-card {
+    padding: 10px;
+    border-radius: 14px;
+    gap: 8px;
+  }
+  .mobile-compact .performance-headline strong { font-size: 24px; }
+  .mobile-compact .performance-headline { align-items: center; gap: 8px; }
+  .mobile-compact .price-journey { padding: 8px; gap: 5px; }
+  .mobile-compact .price-journey strong { font-size: 13px; }
+  .mobile-compact .price-journey span,
+  .mobile-compact .price-journey small,
+  .mobile-compact .performance-price-line span,
+  .mobile-compact .performance-source small,
+  .mobile-compact .card-disclaimer { font-size: 10.5px; }
+  .mobile-compact .journey-arrow { font-size: 11px; }
 }

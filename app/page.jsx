@@ -394,23 +394,8 @@ export default function Page() {
           <span className="chip">현재 보기: {selectedChannelLabel}</span>
           {channelFilter !== 'all' && <button className="btn secondary small" type="button" onClick={() => setChannelFilter('all')}>전체 채널로 초기화</button>}
         </div>
-        <div className="grid-4">
-          {filteredPerformances.map((item) => {
-            const rate = pct(item); const delta = item.latest - item.recClose;
-            return <article className="card stack" key={`${item.channelId}-${item.asset}`}>
-              <div className="between"><span className="muted">{channelName(item.channelId)} · {item.contributor}</span><span className={`chip ${item.state === 'GOOD' ? 'chip-green' : item.state === 'MISS' ? 'chip-red' : 'chip-blue'}`}>{item.state}</span></div>
-              <h3>{item.asset}</h3>
-              <span className="chip">{item.source}</span>
-              <div>
-                <div className="value-line"><span className="muted">추천일 종가 기준일</span><strong className="nowrap">{item.date}</strong></div>
-                <div className="value-line"><span className="muted">최신가 기준일</span><strong className="nowrap">{item.latestDate}</strong></div>
-                <div className="value-line"><span className="muted">추천일 종가</span><strong className="nowrap">{formatWon(item.recClose)}</strong></div>
-                <div className="value-line"><span className="muted">현재가</span><strong className="nowrap">{formatWon(item.latest)}</strong></div>
-              </div>
-              <div><p className="eyebrow">Return</p><strong className={rate >= 0 ? 'positive' : 'negative'}>{rate >= 0 ? '+' : ''}{rate.toFixed(2)}%</strong><p className={delta >= 0 ? 'positive' : 'negative'}>{delta >= 0 ? '+' : ''}{formatWon(delta)}</p></div>
-              <p className="muted">{item.title}</p>
-            </article>;
-          })}
+        <div className="performance-card-grid">
+          {filteredPerformances.map((item, index) => <PerformanceSummaryCard item={item} key={`${item.channelId}-${item.asset}`} featured={index === 0} channelLabel={channelName(item.channelId)} />)}
         </div>
       </section>
 
@@ -450,6 +435,48 @@ export default function Page() {
       </section>
     </main>
   );
+}
+
+function PerformanceSummaryCard({ item, featured, channelLabel }) {
+  const rate = pct(item);
+  const delta = item.latest - item.recClose;
+  const positive = rate >= 0;
+  const chipClass = item.state === 'GOOD' ? 'chip-green' : item.state === 'MISS' ? 'chip-red' : 'chip-blue';
+  const arrow = positive ? '▲' : '▼';
+
+  return <article className={`performance-summary-card ${featured ? 'featured' : ''}`}>
+    <div className="performance-list-row">
+      <div>
+        <p className="eyebrow">{channelLabel} · {item.contributor}</p>
+        <h3>{item.asset}</h3>
+      </div>
+      <span className={`chip ${chipClass}`}>{item.state}</span>
+    </div>
+
+    <div className="performance-headline">
+      <strong className={positive ? 'positive' : 'negative'}>{positive ? '+' : ''}{rate.toFixed(2)}%</strong>
+      <span className={positive ? 'positive' : 'negative'}>{arrow} {delta >= 0 ? '+' : ''}{formatWon(delta)}</span>
+    </div>
+    <div className="mini-ascii-rule" aria-hidden="true"><span /></div>
+
+    <div className="price-journey" aria-label="추천일 가격과 현재 가격 비교">
+      <div><span>추천일</span><strong>{formatWon(item.recClose)}</strong><small>{item.date}</small></div>
+      <span className="journey-arrow">────▶</span>
+      <div><span>현재</span><strong>{formatWon(item.latest)}</strong><small>{item.latestDate}</small></div>
+    </div>
+
+    <div className="performance-price-line">
+      <span>추천일 종가 대비</span>
+      <strong className={positive ? 'positive' : 'negative'}>{positive ? '+' : ''}{rate.toFixed(2)}%</strong>
+    </div>
+
+    <div className="performance-source">
+      <span className="label">근거 콘텐츠</span>
+      <p>{item.title}</p>
+      <small>{item.source}</small>
+    </div>
+    <p className="card-disclaimer">공개 콘텐츠 발언 기준 · 투자 권유가 아닙니다.</p>
+  </article>;
 }
 
 function Kpi({ label, value, desc }) {
