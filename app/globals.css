@@ -671,6 +671,17 @@ p { line-height: 1.68; }
 
 
 .stock-decision-board { scroll-margin-top: 96px; }
+.stock-first-hero { align-items: start; }
+.hero-decision-panel { border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 18px; background: var(--revolut-surface); }
+.hero-kpi-grid .card { min-height: 120px; }
+.top-decision-card { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; padding: 14px; border: 1px solid var(--line); border-radius: 18px; background: #fff; }
+.top-decision-rank { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; background: var(--text); color: #fff; font-weight: 950; }
+.top-decision-main { display: grid; gap: 10px; }
+.decision-mini-metrics { display: grid; grid-template-columns: .7fr .7fr 1.2fr; gap: 8px; }
+.decision-mini-metrics span { display: grid; gap: 3px; padding: 10px; border-radius: 14px; background: var(--revolut-blue-soft); }
+.decision-mini-metrics strong { font-size: 17px; line-height: 1.1; letter-spacing: -.03em; }
+.decision-mini-metrics small { color: var(--muted); font-size: 11px; font-weight: 850; line-height: 1.25; }
+.top-decision-reason { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .decision-layout { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 18px; align-items: start; }
 .decision-chart { display: grid; gap: 13px; }
 .decision-bar-row { display: grid; grid-template-columns: minmax(120px, .72fr) minmax(0, 1fr) 44px; gap: 10px; align-items: center; }
@@ -740,6 +751,13 @@ p { line-height: 1.68; }
   .mobile-compact .today-asset-strip { gap: 6px; }
 
   .mobile-compact .decision-layout { grid-template-columns: 1fr; gap: 8px; }
+  .mobile-compact .hero-decision-panel { padding: 12px; border-radius: 16px; }
+  .mobile-compact .top-decision-card { grid-template-columns: 28px minmax(0, 1fr); gap: 8px; padding: 10px; border-radius: 14px; }
+  .mobile-compact .top-decision-rank { width: 28px; height: 28px; border-radius: 10px; }
+  .mobile-compact .decision-mini-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .mobile-compact .decision-mini-metrics span { padding: 7px; border-radius: 11px; }
+  .mobile-compact .decision-mini-metrics strong { font-size: 13px; }
+  .mobile-compact .top-decision-reason { font-size: 12px; -webkit-line-clamp: 2; }
   .mobile-compact .decision-chart { gap: 8px; }
   .mobile-compact .decision-bar-row { grid-template-columns: minmax(86px, .7fr) minmax(0, 1fr) 36px; gap: 8px; }
   .mobile-compact .decision-bar-label small,

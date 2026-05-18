@@ -103,7 +103,7 @@ test('mobile compact mode shortens labels, reduces spacing, and hides nonessenti
   assert(css.includes('.mobile-compact .grid-4'));
   assert(css.includes('.mobile-compact .report-grid'));
   assert(css.includes('.mobile-compact .league-grid'));
-  for (const text of ['2026-05-18 KST', '투자자용', '공개 콘텐츠 기반', '종목 우선순위 보기', '출처 신뢰도']) {
+  for (const text of ['2026-05-18 KST', '종목 우선', '출처는 근거 레이어', '종목 우선순위 보기', '출처 신뢰도']) {
     assert(app.includes(text), `missing compact copy ${text}`);
   }
   for (const text of ['상황판', '소스', '콘텐츠', '검수', '리그', '리포트', '알고리즘', 'PMF', '로그']) {
@@ -166,10 +166,10 @@ test('investor briefing exposes today picks, trust score, and admin-deferred gua
   const css = read('app/globals.css');
   const fixture = read('data/ingestionDashboardFixtures.js');
   const plan = read('docs/ingestion-dashboard-ux-plan.md');
-  for (const text of ['investorDashboard', 'Stock-first Decision Board', '무엇을 먼저 살펴볼까', 'DecisionTableRow', 'InvestorPickCard', '종목 분석 요약', 'kick-quote', '신뢰도:', 'SourceTrustCard', '출처별 신뢰도 요약', '투자 권유가 아닙니다']) {
+  for (const text of ['investorDashboard', 'Stock-first Decision Board', '무엇을 먼저 살펴볼까', 'TopDecisionCard', '먼저 열어볼 3종목', '종목 판단의 보조 근거', 'DecisionTableRow', 'InvestorPickCard', '종목 분석 요약', 'kick-quote', '신뢰도:', 'SourceTrustCard', '출처별 신뢰도 요약', '투자 권유가 아닙니다']) {
     assert(app.includes(text), `missing investor briefing text ${text}`);
   }
-  for (const text of ['stock-decision-board', 'decision-layout', 'decision-table', 'investor-pick-grid', 'source-trust-grid', 'trust-meter', 'pick-analysis-block', 'kick-quote', 'source-trust-metrics', 'investor-deferred', '#today-picks']) {
+  for (const text of ['stock-decision-board', 'stock-first-hero', 'hero-decision-panel', 'top-decision-card', 'decision-mini-metrics', 'decision-layout', 'decision-table', 'investor-pick-grid', 'source-trust-grid', 'trust-meter', 'pick-analysis-block', 'kick-quote', 'source-trust-metrics', 'investor-deferred', '#today-picks']) {
     assert(css.includes(text), `missing investor briefing CSS ${text}`);
   }
   for (const text of ['publicInvestorDashboard', 'recommendationCards', 'analysisSummary', 'kickQuote', 'trustScore', 'trustReasons', 'adminDeferred', 'content-pick-extraction-v0.1']) {
@@ -215,7 +215,7 @@ test('multi-channel and three-month timeline expansion includes Sinsa-imdang wit
   assert(app.includes('Channel Filter'));
   assert(app.includes('setChannelFilter'));
   assert(app.includes('투자 콘텐츠'));
-  assert(app.includes('먼저 볼 종목부터'));
+  assert(app.includes('무엇을 먼저'));
   assert(app.includes('종목이 1순위 · 출처는 근거'));
   assert(app.includes('id="league-board"'));
   assert(app.includes('id="weekly-report"'));

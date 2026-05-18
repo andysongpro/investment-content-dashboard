@@ -222,6 +222,7 @@ export default function Page() {
   const selectedTimeline = assetTimelines.find(item => item.ticker === assetFilter) || assetTimelines[0];
   const assetShareText = `[종목별 추천 타임라인]\n${selectedTimeline.name}: 공개 콘텐츠 발언 기준 ${selectedTimeline.events.length}건\n기준: 추천일 종가 대비 / 근거 발언 포함\n투자 권유가 아닙니다.`;
   const decisionRows = useMemo(() => buildDecisionRows(investorDashboard.recommendationCards), []);
+  const topDecisionRows = decisionRows.slice(0, 3);
   const positiveDecisionCount = decisionRows.filter(row => row.action !== '회피/매도 확인').length;
 
   return (
@@ -241,23 +242,23 @@ export default function Page() {
           <a href="#channel-request">요청</a>
         </nav>
       </header>
-      <section className="hero panel panel-strong block">
+      <section className="hero panel panel-strong block stock-first-hero">
         <div className="stack">
           <div className="row">
             <span className="chip chip-accent">2026-05-18 KST</span>
-            <span className="chip chip-green">투자자용</span>
-            <span className="chip">공개 콘텐츠 기반</span>
+            <span className="chip chip-green">종목 우선</span>
+            <span className="chip">출처는 근거 레이어</span>
           </div>
           <div>
             <p className="eyebrow">오늘의 종목 픽 후보</p>
-            <h1>먼저 볼 종목부터<br />고르세요</h1>
-            <p className="muted mobile-hide">{investorDashboard.dateLabel} 기준 공개 콘텐츠에서 나온 종목 후보를 종목 우선순위로 재정렬했습니다. 채널·발화자는 결론을 보강하는 근거로만 배치하고, 결정에 필요한 신뢰도·발언 수·근거 문맥을 바로 확인하게 했습니다.</p>
-            <p className="muted mobile-only">종목을 먼저 보고, 채널 신뢰도는 근거로 확인합니다. 투자 권유가 아닙니다.</p>
+            <h1>무엇을 먼저<br />검토할까</h1>
+            <p className="muted mobile-hide">{investorDashboard.dateLabel} 기준 공개 콘텐츠의 발언을 종목별로 먼저 묶었습니다. 첫 화면은 “살펴볼 종목 후보 → 판단 이유 → 신뢰 근거” 순서이고, 채널·발화자 평가는 종목 판단을 뒷받침하는 보조 정보로만 표시합니다.</p>
+            <p className="muted mobile-only">종목 후보를 먼저 보고, 채널 신뢰도는 근거로만 확인합니다. 투자 권유가 아닙니다.</p>
           </div>
-          <div className="grid-3">
-            <Kpi label="우선 검토 종목" value={decisionRows.length} desc="종목 기준 묶음" />
-            <Kpi label="매수/관찰 후보" value={positiveDecisionCount} desc="긍정·명시 추천" />
-            <Kpi label="근거 확인됨" value={`${investorDashboard.summary.transcriptReady}/${investorDashboard.summary.collectedVideos}`} desc="영상 문맥 확인" />
+          <div className="grid-3 hero-kpi-grid">
+            <Kpi label="우선 검토" value={decisionRows.length} desc="종목 기준 묶음" />
+            <Kpi label="긍정 후보" value={positiveDecisionCount} desc="매수/관찰 검토" />
+            <Kpi label="근거 확보" value={`${investorDashboard.summary.transcriptReady}/${investorDashboard.summary.collectedVideos}`} desc="영상 문맥 확인" />
           </div>
           <div className="row">
             <a className="btn anchor-link" href="#stock-decision">종목 우선순위 보기</a>
@@ -266,31 +267,14 @@ export default function Page() {
           </div>
         </div>
 
-        <section id="source-registration" className="panel block stack investor-deferred">
+        <aside className="hero-decision-panel stack" aria-label="가장 먼저 볼 종목 후보">
           <div className="between">
-            <div><p className="eyebrow">소스</p><h2>다채널 소스 설정</h2></div>
-            <span className="chip">로컬 저장</span>
+            <div><p className="eyebrow">Priority Picks</p><h2>먼저 열어볼 3종목</h2></div>
+            <span className="chip chip-accent">종목 중심</span>
           </div>
-          <label className="field"><span className="label">소스명</span><input className="input" value={source.name} onChange={e => update('name', e.target.value)} />{errors.name && <span className="error">{errors.name}</span>}</label>
-          <label className="field"><span className="label">YouTube URL</span><input className="input" type="url" value={source.url} onChange={e => update('url', e.target.value)} />{errors.url && <span className="error">{errors.url}</span>}</label>
-          <div className="grid-3">
-            <label className="field"><span className="label">언어</span><input className="input" value={source.language} onChange={e => update('language', e.target.value)} /></label>
-            <label className="field"><span className="label">후보</span><input className="input" type="number" inputMode="numeric" min="1" value={source.candidateLimit} onChange={e => update('candidateLimit', e.target.value)} />{errors.candidateLimit && <span className="error">{errors.candidateLimit}</span>}</label>
-            <label className="field"><span className="label">분석</span><input className="input" type="number" inputMode="numeric" min="1" max={source.candidateLimit} value={source.analysisLimit} onChange={e => update('analysisLimit', e.target.value)} />{errors.analysisLimit && <span className="error">{errors.analysisLimit}</span>}</label>
-          </div>
-          <div className="source-list">
-            {sourceChannels.map(ch => <div className="source-row" key={ch.id}><div><strong>{ch.name}</strong><p className="footer-note">{ch.status} · 후보 {ch.candidate} / 분석 {ch.analyzed}</p></div><span className="chip">{ch.handle}</span></div>)}
-          </div>
-          <div className="row"><button className="btn" type="button" onClick={save}>저장</button><button className="btn secondary" type="button" onClick={reset}>초기화</button></div>
-          <div className="card mobile-hide"><p className="eyebrow">소스 스냅샷</p><strong>{source.name}</strong><p className="muted">{source.url}</p><p className="footer-note">last fixture sync: {latestFixtureSync}</p></div>
-        </section>
-      </section>
-
-      <section className="section kpi">
-        <Kpi label="오늘 공개 영상" value={investorDashboard.summary.todayVideos} desc="5/18 KST 영상" />
-        <Kpi label="최근 영상 포함" value={investorDashboard.summary.backfillVideos} desc="최근 30일 보완" />
-        <Kpi label="신뢰도 높음" value={investorDashboard.summary.highTrust} desc="근거가 선명한 언급" />
-        <Kpi label="근거 부족" value={investorDashboard.summary.needsContext} desc="근거가 짧거나 해설성" />
+          {topDecisionRows.map((row, index) => <TopDecisionCard row={row} rank={index + 1} key={`hero-${row.asset}`} />)}
+          <p className="footer-note">신뢰도는 채널 순위가 아니라 이 종목 판단을 뒷받침하는 발언 품질·직접성·중복 근거의 평균입니다.</p>
+        </aside>
       </section>
 
       <section id="stock-decision" className="section panel block stack stock-decision-board">
@@ -307,7 +291,7 @@ export default function Page() {
             {decisionRows.map(row => <DecisionBar row={row} key={row.asset} />)}
           </div>
           <div className="decision-table" role="table" aria-label="종목별 의사결정 표">
-            <div className="decision-table-head" role="row"><span>종목</span><span>판단</span><span>근거</span><span>신뢰</span></div>
+            <div className="decision-table-head" role="row"><span>종목</span><span>판단</span><span>근거 차트</span><span>신뢰</span></div>
             {decisionRows.map(row => <DecisionTableRow row={row} key={`${row.asset}-row`} />)}
           </div>
         </div>
@@ -332,11 +316,30 @@ export default function Page() {
       </section>
 
       <section id="source-trust" className="section panel block stack source-trust-board">
-        <div className="between"><div><p className="eyebrow">출처 신뢰도</p><h2>출처별 신뢰도 요약</h2></div><span className="chip">종목 언급 기준</span></div>
-        <p className="muted">같은 종목 언급이라도 출처와 문맥의 선명도가 다릅니다. 평균 신뢰도는 오늘 공개 영상 콘텐츠의 발언 직접성, 인용문 품질, 타인 포트폴리오 해설 여부를 보수적으로 반영합니다.</p>
+        <div className="between"><div><p className="eyebrow">출처 신뢰도</p><h2>출처별 신뢰도 요약</h2></div><span className="chip">종목 판단의 보조 근거</span></div>
+        <p className="muted">이 영역은 “어느 채널이 더 대단한가”가 아니라, 위 종목 표의 신뢰도를 뒷받침하는 보조 근거입니다. 같은 종목 언급이라도 발언 직접성, 인용문 품질, 타인 포트폴리오 해설 여부가 다르기 때문에 최종 판단 전 확인용으로만 둡니다.</p>
         <div className="source-trust-grid">
           {investorDashboard.sourceCards.map(source => <SourceTrustCard source={source} key={source.source} />)}
         </div>
+      </section>
+
+      <section id="source-registration" className="panel block stack investor-deferred">
+        <div className="between">
+          <div><p className="eyebrow">소스</p><h2>다채널 소스 설정</h2></div>
+          <span className="chip">로컬 저장</span>
+        </div>
+        <label className="field"><span className="label">소스명</span><input className="input" value={source.name} onChange={e => update('name', e.target.value)} />{errors.name && <span className="error">{errors.name}</span>}</label>
+        <label className="field"><span className="label">YouTube URL</span><input className="input" type="url" value={source.url} onChange={e => update('url', e.target.value)} />{errors.url && <span className="error">{errors.url}</span>}</label>
+        <div className="grid-3">
+          <label className="field"><span className="label">언어</span><input className="input" value={source.language} onChange={e => update('language', e.target.value)} /></label>
+          <label className="field"><span className="label">후보</span><input className="input" type="number" inputMode="numeric" min="1" value={source.candidateLimit} onChange={e => update('candidateLimit', e.target.value)} />{errors.candidateLimit && <span className="error">{errors.candidateLimit}</span>}</label>
+          <label className="field"><span className="label">분석</span><input className="input" type="number" inputMode="numeric" min="1" max={source.candidateLimit} value={source.analysisLimit} onChange={e => update('analysisLimit', e.target.value)} />{errors.analysisLimit && <span className="error">{errors.analysisLimit}</span>}</label>
+        </div>
+        <div className="source-list">
+          {sourceChannels.map(ch => <div className="source-row" key={ch.id}><div><strong>{ch.name}</strong><p className="footer-note">{ch.status} · 후보 {ch.candidate} / 분석 {ch.analyzed}</p></div><span className="chip">{ch.handle}</span></div>)}
+        </div>
+        <div className="row"><button className="btn" type="button" onClick={save}>저장</button><button className="btn secondary" type="button" onClick={reset}>초기화</button></div>
+        <div className="card mobile-hide"><p className="eyebrow">소스 스냅샷</p><strong>{source.name}</strong><p className="muted">{source.url}</p><p className="footer-note">last fixture sync: {latestFixtureSync}</p></div>
       </section>
 
       <section className="investor-deferred section panel block stack" id="league-board">
@@ -532,6 +535,26 @@ function DecisionTableRow({ row }) {
     <div><strong>{row.cards.length}건</strong><small>{row.sourceNames}</small></div>
     <div><strong>{row.avgTrust}/100</strong><small>평균 근거 신뢰</small></div>
   </div>;
+}
+
+function TopDecisionCard({ row, rank }) {
+  const strongestCard = [...row.cards].sort((a, b) => (b.trustScore || 0) - (a.trustScore || 0))[0];
+  const chipClass = row.action.includes('회피') ? 'chip-red' : row.action === '매수 검토' ? 'chip-green' : 'chip-blue';
+  return <article className="top-decision-card">
+    <div className="top-decision-rank">{rank}</div>
+    <div className="top-decision-main">
+      <div className="between">
+        <div><h3>{row.asset} <span className="dim">{row.ticker}</span></h3><p className="footer-note">{row.market} · {row.cards.length}개 발언 · {row.sourceCount}개 출처</p></div>
+        <span className={`chip ${chipClass}`}>{row.action}</span>
+      </div>
+      <div className="decision-mini-metrics">
+        <span><strong>{row.score}</strong><small>우선순위</small></span>
+        <span><strong>{row.avgTrust}</strong><small>근거 신뢰</small></span>
+        <span><strong>{strongestCard?.claimType || '후보'}</strong><small>{strongestCard?.source || '출처 확인'}</small></span>
+      </div>
+      <p className="top-decision-reason">{strongestCard?.analysisSummary}</p>
+    </div>
+  </article>;
 }
 
 function PerformanceSummaryCard({ item, featured, channelLabel }) {
