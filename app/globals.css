@@ -669,6 +669,23 @@ p { line-height: 1.68; }
   .mobile-compact .journey-arrow { font-size: 11px; }
 }
 
+
+.stock-decision-board { scroll-margin-top: 96px; }
+.decision-layout { display: grid; grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); gap: 18px; align-items: start; }
+.decision-chart { display: grid; gap: 13px; }
+.decision-bar-row { display: grid; grid-template-columns: minmax(120px, .72fr) minmax(0, 1fr) 44px; gap: 10px; align-items: center; }
+.decision-bar-label { display: grid; gap: 3px; }
+.decision-bar-label small, .decision-table-row small, .source-subline { color: var(--muted); font-size: 12px; font-weight: 800; line-height: 1.35; }
+.decision-bar-track { height: 13px; border-radius: 999px; background: var(--revolut-gray-100); overflow: hidden; }
+.decision-bar-track span { display: block; height: 100%; min-width: 8px; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--green)); }
+.decision-bar-track span.avoid { background: linear-gradient(90deg, var(--orange), var(--red)); }
+.decision-table { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-lg); background: #fff; }
+.decision-table-head, .decision-table-row { display: grid; grid-template-columns: minmax(120px, 1fr) 108px minmax(130px, .9fr) 92px; gap: 10px; align-items: center; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+.decision-table-head { background: var(--revolut-surface); color: var(--muted); font-size: 12px; font-weight: 900; }
+.decision-table-row:last-child { border-bottom: 0; }
+.decision-table-row > div { display: grid; gap: 3px; }
+.source-subline { margin: 4px 0 0; }
+
 /* Investor-facing daily briefing */
 .investor-deferred { display: none !important; }
 .investor-dashboard, .source-trust-board { scroll-margin-top: 96px; }
@@ -721,4 +738,14 @@ p { line-height: 1.68; }
   .mobile-compact .source-trust-metrics { grid-template-columns: 1fr; gap: 8px; }
   .mobile-compact .source-trust-metrics div { padding: 12px; border-radius: 14px; }
   .mobile-compact .today-asset-strip { gap: 6px; }
+
+  .mobile-compact .decision-layout { grid-template-columns: 1fr; gap: 8px; }
+  .mobile-compact .decision-chart { gap: 8px; }
+  .mobile-compact .decision-bar-row { grid-template-columns: minmax(86px, .7fr) minmax(0, 1fr) 36px; gap: 8px; }
+  .mobile-compact .decision-bar-label small,
+  .mobile-compact .decision-table-row small,
+  .mobile-compact .source-subline { font-size: 11px; }
+  .mobile-compact .decision-table-head { display: none; }
+  .mobile-compact .decision-table-row { grid-template-columns: 1fr; gap: 7px; padding: 11px; }
+  .mobile-compact .decision-table-row .chip { width: fit-content; }
 }

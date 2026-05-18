@@ -221,6 +221,8 @@ export default function Page() {
   const cautionItems = allLeagueItems.filter(item => item.league === 'Caution Watch');
   const selectedTimeline = assetTimelines.find(item => item.ticker === assetFilter) || assetTimelines[0];
   const assetShareText = `[종목별 추천 타임라인]\n${selectedTimeline.name}: 공개 콘텐츠 발언 기준 ${selectedTimeline.events.length}건\n기준: 추천일 종가 대비 / 근거 발언 포함\n투자 권유가 아닙니다.`;
+  const decisionRows = useMemo(() => buildDecisionRows(investorDashboard.recommendationCards), []);
+  const positiveDecisionCount = decisionRows.filter(row => row.action !== '회피/매도 확인').length;
 
   return (
     <main id="top" className="container mobile-compact">
@@ -230,12 +232,12 @@ export default function Page() {
             <span className="mobile-brand-mark">I</span>
             <span><strong>콘텐츠 검증</strong><small>Investment OS</small></span>
           </a>
-          <a className="mobile-appbar-cta" href="#channel-request">채널 요청</a>
+          <a className="mobile-appbar-cta" href="#stock-decision">종목 보기</a>
         </div>
         <nav className="mobile-sticky-nav" aria-label="모바일 섹션 바로가기">
-          <a href="#top">요약</a>
-          <a href="#today-picks">오늘</a>
-          <a href="#source-trust">신뢰도</a>
+          <a href="#stock-decision">종목</a>
+          <a href="#today-picks">근거</a>
+          <a href="#source-trust">출처</a>
           <a href="#channel-request">요청</a>
         </nav>
       </header>
@@ -247,20 +249,20 @@ export default function Page() {
             <span className="chip">공개 콘텐츠 기반</span>
           </div>
           <div>
-            <p className="eyebrow">오늘의 투자 콘텐츠 브리핑</p>
-            <h1>누가 어떤 종목을<br />말했는가</h1>
-            <p className="muted mobile-hide">{investorDashboard.dateLabel} 기준 오늘 확인한 영상한 YouTube 투자 콘텐츠에서 종목 언급 후보만 추렸습니다. 투자자 화면은 관리자용 수집 상태를 덜어내고, 출처·종목·발언 방향·근거 문맥의 신뢰도만 보여줍니다.</p>
-            <p className="muted mobile-only">오늘 영상에서 나온 종목 언급과 신뢰도만 봅니다. 투자 권유가 아닙니다.</p>
+            <p className="eyebrow">오늘의 종목 픽 후보</p>
+            <h1>먼저 볼 종목부터<br />고르세요</h1>
+            <p className="muted mobile-hide">{investorDashboard.dateLabel} 기준 공개 콘텐츠에서 나온 종목 후보를 종목 우선순위로 재정렬했습니다. 채널·발화자는 결론을 보강하는 근거로만 배치하고, 결정에 필요한 신뢰도·발언 수·근거 문맥을 바로 확인하게 했습니다.</p>
+            <p className="muted mobile-only">종목을 먼저 보고, 채널 신뢰도는 근거로 확인합니다. 투자 권유가 아닙니다.</p>
           </div>
           <div className="grid-3">
-            <Kpi label="오늘 확인한 영상" value={investorDashboard.summary.collectedVideos} desc={`${investorDashboard.summary.todayVideos}개는 5/18 공개`} />
-            <Kpi label="오늘 언급 종목" value={investorDashboard.summary.claimCandidates} desc="종목 언급 카드" />
+            <Kpi label="우선 검토 종목" value={decisionRows.length} desc="종목 기준 묶음" />
+            <Kpi label="매수/관찰 후보" value={positiveDecisionCount} desc="긍정·명시 추천" />
             <Kpi label="근거 확인됨" value={`${investorDashboard.summary.transcriptReady}/${investorDashboard.summary.collectedVideos}`} desc="영상 문맥 확인" />
           </div>
           <div className="row">
-            <a className="btn anchor-link" href="#today-picks">오늘 후보 보기</a>
-            <a className="btn secondary anchor-link" href="#source-trust">신뢰도 기준</a>
-            <a className="btn secondary anchor-link" href="#channel-request">채널 요청</a>
+            <a className="btn anchor-link" href="#stock-decision">종목 우선순위 보기</a>
+            <a className="btn secondary anchor-link" href="#today-picks">근거 카드</a>
+            <a className="btn secondary anchor-link" href="#source-trust">출처 신뢰도</a>
           </div>
         </div>
 
@@ -291,11 +293,32 @@ export default function Page() {
         <Kpi label="근거 부족" value={investorDashboard.summary.needsContext} desc="근거가 짧거나 해설성" />
       </section>
 
+      <section id="stock-decision" className="section panel block stack stock-decision-board">
+        <div className="between">
+          <div>
+            <p className="eyebrow">Stock-first Decision Board</p>
+            <h2>무엇을 먼저 살펴볼까</h2>
+          </div>
+          <span className="chip chip-accent">종목이 1순위 · 출처는 근거</span>
+        </div>
+        <p className="muted">점수는 매수 지시가 아니라 “오늘 더 먼저 검토할 순서”입니다. 긍정/부정 방향, 근거 신뢰도, 중복 언급 수, 직접 추천 여부를 함께 반영했습니다.</p>
+        <div className="decision-layout">
+          <div className="decision-chart card" aria-label="종목별 검토 우선순위 차트">
+            {decisionRows.map(row => <DecisionBar row={row} key={row.asset} />)}
+          </div>
+          <div className="decision-table" role="table" aria-label="종목별 의사결정 표">
+            <div className="decision-table-head" role="row"><span>종목</span><span>판단</span><span>근거</span><span>신뢰</span></div>
+            {decisionRows.map(row => <DecisionTableRow row={row} key={`${row.asset}-row`} />)}
+          </div>
+        </div>
+        <p className="footer-note">표의 “근거”는 영상/발화자 수입니다. 채널 신뢰도는 개별 종목 판단을 보강하는 보조 정보이며, 종목보다 앞에 오지 않도록 아래 보조 섹션으로 내렸습니다.</p>
+      </section>
+
       <section id="today-picks" className="section panel block stack investor-dashboard">
         <div className="between">
           <div>
-            <p className="eyebrow">Daily Investor Briefing</p>
-            <h2>오늘 나온 종목 언급</h2>
+            <p className="eyebrow">Evidence Cards</p>
+            <h2>종목별 판단을 뒷받침하는 근거</h2>
           </div>
           <span className="chip chip-accent">{investorDashboard.runLabel}</span>
         </div>
@@ -471,6 +494,46 @@ export default function Page() {
   );
 }
 
+function buildDecisionRows(cards) {
+  const grouped = cards.reduce((acc, card) => {
+    const key = `${card.asset}-${card.ticker}`;
+    if (!acc[key]) acc[key] = { asset: card.asset, ticker: card.ticker, market: card.market, cards: [], sources: new Set(), stanceBalance: 0, trustTotal: 0, explicit: 0 };
+    acc[key].cards.push(card);
+    acc[key].sources.add(card.source);
+    acc[key].trustTotal += card.trustScore || 0;
+    acc[key].stanceBalance += card.stance === '부정' ? -1 : card.stance === '긍정' ? 1 : 0;
+    if (card.claimType === '명시 추천') acc[key].explicit += 1;
+    return acc;
+  }, {});
+
+  return Object.values(grouped).map(row => {
+    const avgTrust = Math.round(row.trustTotal / row.cards.length);
+    const directionScore = row.stanceBalance > 0 ? 18 : row.stanceBalance < 0 ? -22 : 0;
+    const score = Math.max(0, Math.min(100, Math.round(avgTrust + directionScore + row.explicit * 10 + Math.min(row.cards.length - 1, 3) * 6)));
+    const action = row.stanceBalance < 0 ? '회피/매도 확인' : row.explicit > 0 ? '매수 검토' : '관찰 후보';
+    return { ...row, avgTrust, score, action, sourceCount: row.sources.size, sourceNames: Array.from(row.sources).join(', ') };
+  }).sort((a, b) => b.score - a.score || b.avgTrust - a.avgTrust);
+}
+
+function DecisionBar({ row }) {
+  const isAvoid = row.action.includes('회피');
+  return <div className="decision-bar-row">
+    <div className="decision-bar-label"><strong>{row.asset}</strong><small>{row.ticker} · {row.action}</small></div>
+    <div className="decision-bar-track"><span className={isAvoid ? 'avoid' : ''} style={{ width: `${row.score}%` }} /></div>
+    <strong className={isAvoid ? 'negative' : 'positive'}>{row.score}</strong>
+  </div>;
+}
+
+function DecisionTableRow({ row }) {
+  const chipClass = row.action.includes('회피') ? 'chip-red' : row.action === '매수 검토' ? 'chip-green' : 'chip-blue';
+  return <div className="decision-table-row" role="row">
+    <div><strong>{row.asset}</strong><small>{row.ticker} · {row.market}</small></div>
+    <span className={`chip ${chipClass}`}>{row.action}</span>
+    <div><strong>{row.cards.length}건</strong><small>{row.sourceNames}</small></div>
+    <div><strong>{row.avgTrust}/100</strong><small>평균 근거 신뢰</small></div>
+  </div>;
+}
+
 function PerformanceSummaryCard({ item, featured, channelLabel }) {
   const rate = pct(item);
   const delta = item.latest - item.recClose;
@@ -578,8 +641,9 @@ function InvestorPickCard({ card }) {
   return <article className="investor-pick-card stack">
     <div className="between">
       <div>
-        <p className="eyebrow">{card.source} · {card.publishedKstDate || '수집일 기준'}</p>
+        <p className="eyebrow">{card.market} · {card.publishedKstDate || '수집일 기준'}</p>
         <h3>{card.asset} <span className="dim">{card.ticker}</span></h3>
+        <p className="source-subline">근거: {card.source}</p>
       </div>
       <span className={`chip ${chipClass}`}>{card.stance}</span>
     </div>
