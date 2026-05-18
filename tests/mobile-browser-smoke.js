@@ -59,12 +59,28 @@ const assert = require('assert');
   assert(persistentNav.visible, `mobile global nav disappeared after deep scroll: ${JSON.stringify(persistentNav)}`);
   assert(persistentNav.top >= 0 && persistentNav.bottom <= persistentNav.viewportHeight, `mobile global nav should remain in viewport: ${JSON.stringify(persistentNav)}`);
 
-  await page.click('a[href="#source-trust"]');
-  await page.waitForTimeout(300);
-  const y = await page.evaluate(() => window.scrollY);
-  assert(y > 600, `source trust link did not scroll enough: ${y}`);
+  await page.click('.mobile-sticky-nav a[href="#source-trust"]');
+  await page.waitForFunction(() => {
+    const section = document.querySelector('#source-trust');
+    const header = document.querySelector('.mobile-global-header');
+    if (!section || !header) return false;
+    const sectionTop = section.getBoundingClientRect().top;
+    const headerBottom = header.getBoundingClientRect().bottom;
+    return sectionTop >= headerBottom && sectionTop <= headerBottom + 180;
+  }, null, { timeout: 5000 });
+  const anchorState = await page.evaluate(() => {
+    const section = document.querySelector('#source-trust').getBoundingClientRect();
+    const header = document.querySelector('.mobile-global-header').getBoundingClientRect();
+    return {
+      y: Math.round(window.scrollY),
+      headerBottom: Math.round(header.bottom),
+      sectionTop: Math.round(section.top),
+    };
+  });
+  assert(anchorState.y > 600, `source trust link did not scroll enough: ${JSON.stringify(anchorState)}`);
+  assert(anchorState.sectionTop >= anchorState.headerBottom, `source trust anchor is covered by fixed header: ${JSON.stringify(anchorState)}`);
 
-  await page.screenshot({path:'/tmp/investment-dashboard-local-mobile-optimized.png', fullPage:true});
+  await page.screenshot({path:'/tmp/investment-dashboard-local-mobile-optimized.png', fullPage:false});
   await browser.close();
   console.log('LOCAL_MOBILE_OPTIMIZED_PASS screenshot=/tmp/investment-dashboard-local-mobile-optimized.png');
 })();
