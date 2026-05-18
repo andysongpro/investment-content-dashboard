@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "next build && node scripts/prepare_static_export.js",
     "start": "npx serve@latest out --listen 3000",
     "test": "node tests/smoke.js && node tests/league-scoring.test.js && node tests/admin-ops.test.js",
     "test:admin": "node tests/admin-ops.test.js && node tests/admin-smoke.js",
