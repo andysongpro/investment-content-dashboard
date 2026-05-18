@@ -13,7 +13,7 @@ const assert = require('assert');
   assert.equal(errors.length,0,errors.join('\n'));
   assert.equal(failures.length,0,failures.join('\n'));
   const body=await page.locator('body').innerText();
-  for(const text of ['요약','리그','리포트','종목','요청','성과','후보','검수','투자 콘텐츠','인텔리전스 허브','추천일 종가 대비 최신가 성과','League Score v0.1','주간 투자 콘텐츠 리포트','종목별 추천 타임라인','이 채널도 분석해주세요']) assert(body.includes(text), text);
+  for(const text of ['요약','오늘','신뢰도','요청','누가 어떤 종목','오늘 나온 종목 언급','신뢰도:','출처별 신뢰도 요약','이 채널도 분석해주세요','투자 권유가 아닙니다']) assert(body.includes(text), text);
 
   const overflow = await page.evaluate(() => {
     const vw = document.documentElement.clientWidth;
@@ -33,11 +33,10 @@ const assert = require('assert');
   const mobileGrids = await page.evaluate(() => ({
     topKpis: getComputedStyle(document.querySelector('main > section.kpi')).gridTemplateColumns.split(' ').length,
     heroKpis: getComputedStyle(document.querySelector('.hero .grid-3')).gridTemplateColumns.split(' ').length,
-    timeline: getComputedStyle(document.querySelector('.timeline')).gridTemplateColumns.split(' ').length,
-    performance: getComputedStyle(document.querySelector('#performance-board .performance-card-grid')).gridTemplateColumns.split(' ').length,
-    report: getComputedStyle(document.querySelector('#weekly-report .report-grid')).gridTemplateColumns.split(' ').length,
+    picks: getComputedStyle(document.querySelector('.investor-pick-grid')).gridTemplateColumns.split(' ').length,
+    sourceTrust: getComputedStyle(document.querySelector('.source-trust-grid')).gridTemplateColumns.split(' ').length,
   }));
-  assert.deepEqual(mobileGrids, { topKpis: 2, heroKpis: 3, timeline: 2, performance: 1, report: 3 });
+  assert.deepEqual(mobileGrids, { topKpis: 2, heroKpis: 3, picks: 1, sourceTrust: 1 });
 
   const persistentNav = await page.evaluate(async () => {
     const header = document.querySelector('.mobile-global-header');
@@ -60,10 +59,10 @@ const assert = require('assert');
   assert(persistentNav.visible, `mobile global nav disappeared after deep scroll: ${JSON.stringify(persistentNav)}`);
   assert(persistentNav.top >= 0 && persistentNav.bottom <= persistentNav.viewportHeight, `mobile global nav should remain in viewport: ${JSON.stringify(persistentNav)}`);
 
-  await page.click('a[href="#review-queue"]');
+  await page.click('a[href="#source-trust"]');
   await page.waitForTimeout(300);
   const y = await page.evaluate(() => window.scrollY);
-  assert(y > 1000, `review link did not scroll enough: ${y}`);
+  assert(y > 600, `source trust link did not scroll enough: ${y}`);
 
   await page.screenshot({path:'/tmp/investment-dashboard-local-mobile-optimized.png', fullPage:true});
   await browser.close();

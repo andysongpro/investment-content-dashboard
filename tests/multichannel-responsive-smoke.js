@@ -16,21 +16,13 @@ const assert = require('assert');
     const resp = await page.goto('http://127.0.0.1:3000', { waitUntil: 'networkidle', timeout: 60000 });
     assert.equal(resp.status(), 200, `${name} status`);
     const body = await page.locator('body').innerText();
-    for (const text of ['투자 콘텐츠', '인텔리전스 허브', '지난 3개월', '2026-02-05 ~ 2026-05-05', '3개월 언급 추이', '채널별 성과 비교', '신사임당', 'Channel Filter', 'League Score v0.1', '주간 투자 콘텐츠 리포트', '종목별 추천 타임라인', '이 채널도 분석해주세요', '투자 권유가 아닙니다']) {
+    for (const text of ['오늘의 투자 콘텐츠 브리핑', '누가 어떤 종목을', '2026-05-18 KST', '오늘 나온 종목 언급', '신뢰도:', '출처별 신뢰도 요약', '신사임당', '이 채널도 분석해주세요', '투자 권유가 아닙니다']) {
       assert(body.includes(text), `${name} missing ${text}`);
     }
     assert(!body.includes('김작가 TV + 신사임당\n다채널 시계열 MVP'), `${name} still uses channel-locked hero title`);
-    await page.selectOption('select', 'sinsa').catch(async () => {
-      const selects = await page.locator('select').all();
-      for (const s of selects) {
-        const opts = await s.locator('option').allTextContents();
-        if (opts.includes('신사임당')) { await s.selectOption('sinsa'); break; }
-      }
-    });
-    await page.waitForTimeout(200);
     const filtered = await page.locator('body').innerText();
-    assert(filtered.includes('현재 보기: 신사임당'), `${name} channel filter did not apply`);
-    assert(filtered.includes('엔비디아'), `${name} sinsa asset missing`);
+    assert(filtered.includes('현대차'), `${name} today source asset missing`);
+    assert(filtered.includes('출처별 신뢰도 요약'), `${name} admin-deferred guardrail missing`);
 
     const overflow = await page.evaluate(() => {
       const vw = document.documentElement.clientWidth;
@@ -43,10 +35,10 @@ const assert = require('assert');
     if (viewport.width <= 560) {
       const mobileGrids = await page.evaluate(() => ({
         topKpis: getComputedStyle(document.querySelector('main > section.kpi')).gridTemplateColumns.split(' ').length,
-        timeline: getComputedStyle(document.querySelector('.timeline')).gridTemplateColumns.split(' ').length,
-        performance: getComputedStyle(document.querySelector('#performance-board .performance-card-grid')).gridTemplateColumns.split(' ').length,
+        picks: getComputedStyle(document.querySelector('.investor-pick-grid')).gridTemplateColumns.split(' ').length,
+        sourceTrust: getComputedStyle(document.querySelector('.source-trust-grid')).gridTemplateColumns.split(' ').length,
       }));
-      assert.deepEqual(mobileGrids, { topKpis: 2, timeline: 2, performance: 1 }, `${name} mobile grids ${JSON.stringify(mobileGrids)}`);
+      assert.deepEqual(mobileGrids, { topKpis: 2, picks: 1, sourceTrust: 1 }, `${name} mobile grids ${JSON.stringify(mobileGrids)}`);
       const touchIssues = await page.evaluate(() => Array.from(document.querySelectorAll('button, a, input, select')).filter(el => {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && r.height < 36;

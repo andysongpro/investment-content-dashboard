@@ -13,10 +13,11 @@ const REQUESTS_KEY = 'investment-content-dashboard/channel-requests';
 const { channelLeagues, panelLeagues, LEAGUE_ALGORITHM_VERSION } = leagueFixtures;
 const { weeklyReport } = weeklyFixtures;
 const { assetTimelines } = timelineFixtures;
+const { publicInvestorDashboard: investorDashboard } = ingestionDashboard;
 const { getEvents, recordEvent, summarizeEvents } = pmfEvents;
 
-const analysisWindow = '2026-02-05 ~ 2026-05-05';
-const latestFixtureSync = '2026-05-05 06:10 KST';
+const analysisWindow = '2026-05-18 수집분';
+const latestFixtureSync = '2026-05-18 17:07 KST';
 
 const defaultSource = {
   name: '김작가 TV + 신사임당',
@@ -233,40 +234,37 @@ export default function Page() {
         </div>
         <nav className="mobile-sticky-nav" aria-label="모바일 섹션 바로가기">
           <a href="#top">요약</a>
-          <a href="#ingestion-results">수집</a>
-          <a href="#performance-board">성과</a>
-          <a href="#league-board">리그</a>
-          <a href="#weekly-report">리포트</a>
-          <a href="#asset-timeline">종목</a>
-          <a href="#review-queue">검수</a>
+          <a href="#today-picks">오늘</a>
+          <a href="#source-trust">신뢰도</a>
+          <a href="#channel-request">요청</a>
         </nav>
       </header>
       <section className="hero panel panel-strong block">
         <div className="stack">
           <div className="row">
-            <span className="chip chip-accent">MVP</span>
-            <span className="chip chip-green">3개월</span>
-            <span className="chip">{saved ? '저장됨' : '저장 대기'}</span>
+            <span className="chip chip-accent">2026-05-18 KST</span>
+            <span className="chip chip-green">투자자용</span>
+            <span className="chip">공개 콘텐츠 기반</span>
           </div>
           <div>
-            <p className="eyebrow">콘텐츠 검증 OS</p>
-            <h1>투자 콘텐츠<br />인텔리전스 허브</h1>
-            <p className="muted mobile-hide">YouTube 투자 콘텐츠를 소스·채널·월별로 확장 관리하고, 추천 발언의 3개월 흐름과 추천일 종가 대비 최신가 성과를 함께 검토하는 대시보드입니다. 김작가 TV와 신사임당은 현재 분석 대상 소스이며, 이후 채널이 늘어나도 서비스 타이틀은 고정 채널명에 묶이지 않습니다.</p>
-            <p className="muted mobile-only">공개 투자 콘텐츠 발언을 기록하고, 추천일 종가 대비 성과를 검증합니다. 투자 권유가 아닙니다.</p>
+            <p className="eyebrow">오늘의 투자 콘텐츠 브리핑</p>
+            <h1>누가 어떤 종목을<br />말했는가</h1>
+            <p className="muted mobile-hide">{investorDashboard.dateLabel} 기준 오늘 확인한 영상한 YouTube 투자 콘텐츠에서 종목 언급 후보만 추렸습니다. 투자자 화면은 관리자용 수집 상태를 덜어내고, 출처·종목·발언 방향·근거 문맥의 신뢰도만 보여줍니다.</p>
+            <p className="muted mobile-only">오늘 영상에서 나온 종목 언급과 신뢰도만 봅니다. 투자 권유가 아닙니다.</p>
           </div>
           <div className="grid-3">
-            <Kpi label="Channels" value={ingestionDashboard.summary.trackedChannels} desc="오늘 추적 채널" />
-            <Kpi label="Candidates" value={ingestionDashboard.summary.claimCandidates} desc="claim 후보" />
-            <Kpi label="Analyzed" value={ingestionDashboard.summary.contentItems} desc="오늘 수집 영상" />
+            <Kpi label="오늘 확인한 영상" value={investorDashboard.summary.collectedVideos} desc={`${investorDashboard.summary.todayVideos}개는 5/18 공개`} />
+            <Kpi label="오늘 언급 종목" value={investorDashboard.summary.claimCandidates} desc="종목 언급 카드" />
+            <Kpi label="근거 확인됨" value={`${investorDashboard.summary.transcriptReady}/${investorDashboard.summary.collectedVideos}`} desc="영상 문맥 확인" />
           </div>
           <div className="row">
-            <a className="btn anchor-link" href="#time-series">3개월</a>
-            <a className="btn secondary anchor-link" href="#review-queue" aria-label="검토 큐로 이동">검토</a>
-            <a className="btn secondary anchor-link" href="/admin">관리자</a>
+            <a className="btn anchor-link" href="#today-picks">오늘 후보 보기</a>
+            <a className="btn secondary anchor-link" href="#source-trust">신뢰도 기준</a>
+            <a className="btn secondary anchor-link" href="#channel-request">채널 요청</a>
           </div>
         </div>
 
-        <section id="source-registration" className="panel block stack mobile-hide">
+        <section id="source-registration" className="panel block stack investor-deferred">
           <div className="between">
             <div><p className="eyebrow">소스</p><h2>다채널 소스 설정</h2></div>
             <span className="chip">로컬 저장</span>
@@ -287,66 +285,38 @@ export default function Page() {
       </section>
 
       <section className="section kpi">
-        <Kpi label="Include" value={contents.filter(x => x.status === 'include').length} desc="포함 후보" />
-        <Kpi label="Maybe" value={contents.filter(x => x.status === 'maybe').length} desc="보류 후보" />
-        <Kpi label="Review Queue" value={ingestionDashboard.summary.reviewQueueItems} desc="오늘 검수 큐" />
-        <Kpi label="Assets" value="12" desc="자산/테마 수" />
+        <Kpi label="오늘 공개 영상" value={investorDashboard.summary.todayVideos} desc="5/18 KST 영상" />
+        <Kpi label="최근 영상 포함" value={investorDashboard.summary.backfillVideos} desc="최근 30일 보완" />
+        <Kpi label="신뢰도 높음" value={investorDashboard.summary.highTrust} desc="근거가 선명한 언급" />
+        <Kpi label="근거 부족" value={investorDashboard.summary.needsContext} desc="근거가 짧거나 해설성" />
       </section>
 
-      <section id="ingestion-results" className="section panel block stack ingestion-dashboard">
+      <section id="today-picks" className="section panel block stack investor-dashboard">
         <div className="between">
           <div>
-            <p className="eyebrow">Daily Ingestion OS</p>
-            <h2>오늘 수집 결과 상황판</h2>
+            <p className="eyebrow">Daily Investor Briefing</p>
+            <h2>오늘 나온 종목 언급</h2>
           </div>
-          <span className="chip chip-accent">{ingestionDashboard.runLabel}</span>
+          <span className="chip chip-accent">{investorDashboard.runLabel}</span>
         </div>
-        <p className="muted">28개 YouTube 채널을 채널별 1개씩 수집한 운영 대시보드입니다. title-only seed, transcript-ready candidate, claim candidate는 분리 표시하며 투자 권유가 아닙니다.</p>
-        <div className="ingestion-metadata">
-          <span className="chip">{ingestionDashboard.claimAlgorithmVersion}</span>
-          <span className="chip">{ingestionDashboard.channelHealthAlgorithmVersion}</span>
-          <span className="chip chip-orange">{ingestionDashboard.dataStatus}</span>
+        <p className="muted">{investorDashboard.headline}</p>
+        <div className="today-asset-strip">
+          {investorDashboard.topAssets.slice(0, 8).map(item => <span className="chip" key={item.asset}>{item.asset} {item.mentions > 1 ? `${item.mentions}회` : ''}</span>)}</div>
+        <div className="investor-pick-grid">
+          {investorDashboard.recommendationCards.map(card => <InvestorPickCard card={card} key={card.id} />)}
         </div>
-        <div className="grid-4 ingestion-kpis">
-          <Kpi label="Tracked" value={ingestionDashboard.summary.trackedChannels} desc="활성 채널" />
-          <Kpi label="Content" value={ingestionDashboard.summary.contentItems} desc="채널별 1개" />
-          <Kpi label="Transcript" value={`${ingestionDashboard.summary.itemsWithTranscript}/${ingestionDashboard.summary.contentItems}`} desc={`${ingestionDashboard.summary.transcriptSegmentsTotal.toLocaleString('ko-KR')} segments`} />
-          <Kpi label="Claims" value={ingestionDashboard.summary.claimCandidates} desc="검수 전 후보" />
-        </div>
+        <p className="footer-note">당일/전일 영상은 아직 성과 검증 대상이 아닙니다. 현재 신뢰도는 영상 발언 근거 품질, 발언 직접성, 타인 포트폴리오 해설 여부를 기준으로 한 보수적 표시입니다. 투자 권유가 아닙니다.</p>
+      </section>
 
-        <div className="ingestion-layout">
-          <div className="stack">
-            <div className="between"><h3>Claim Candidate Triage</h3><span className="chip chip-blue">needs_human_review</span></div>
-            <div className="claim-card-grid">
-              {ingestionDashboard.claimCards.map(claim => <ClaimCandidateCard claim={claim} key={claim.claimId} />)}
-            </div>
-          </div>
-
-          <aside className="stack operator-rail">
-            <div className="card stack">
-              <div className="between"><h3>운영 우선순위</h3><span className="chip chip-red">검수</span></div>
-              <ol className="reason-list">
-                <li><strong>Transcript 없는 2개</strong><span className="muted">삼프로TV, DB증권 더블 먼저 확인</span></li>
-                <li><strong>Claim 후보 10개</strong><span className="muted">evidence quote와 timestamp 검수</span></li>
-                <li><strong>반복 결손 루틴</strong><span className="muted">누적 결손 시 제외 후보 등록</span></li>
-              </ol>
-            </div>
-            <div className="card stack">
-              <h3>UX 원칙</h3>
-              {ingestionDashboard.uxPrinciples.map(item => <p className="muted" key={item}>{item}</p>)}
-            </div>
-          </aside>
-        </div>
-
-        <div className="stack">
-          <div className="between"><h3>Channel Transcript Health</h3><span className="chip">exclusion candidates: {ingestionDashboard.summary.exclusionCandidates}</span></div>
-          <div className="channel-health-grid">
-            {ingestionDashboard.channelHealth.slice(0, 12).map(channel => <ChannelHealthCard channel={channel} key={channel.channelName} />)}
-          </div>
+      <section id="source-trust" className="section panel block stack source-trust-board">
+        <div className="between"><div><p className="eyebrow">출처 신뢰도</p><h2>출처별 신뢰도 요약</h2></div><span className="chip">종목 언급 기준</span></div>
+        <p className="muted">같은 종목 언급이라도 출처와 문맥의 선명도가 다릅니다. 평균 신뢰도는 오늘 공개 영상 콘텐츠의 발언 직접성, 인용문 품질, 타인 포트폴리오 해설 여부를 보수적으로 반영합니다.</p>
+        <div className="source-trust-grid">
+          {investorDashboard.sourceCards.map(source => <SourceTrustCard source={source} key={source.source} />)}
         </div>
       </section>
 
-      <section className="section panel block stack" id="league-board">
+      <section className="investor-deferred section panel block stack" id="league-board">
         <div className="between">
           <div><p className="eyebrow">League Score v0.1</p><h2>채널·패널 리그 보드</h2><span className="chip">League Score v0.1</span></div>
           <span className="chip chip-accent">algorithmVersion: {LEAGUE_ALGORITHM_VERSION}</span>
@@ -373,7 +343,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="section panel block stack" id="weekly-report">
+      <section className="investor-deferred section panel block stack" id="weekly-report">
         <div className="between"><div><p className="eyebrow">PMF Report</p><h2>주간 투자 콘텐츠 리포트</h2></div><span className="chip">{weeklyReport.period}</span></div>
         <p className="muted">공개 콘텐츠 발언 기준 · 추천일 종가 대비 · 투자 권유가 아닙니다.</p>
         <div className="report-grid">
@@ -384,7 +354,7 @@ export default function Page() {
         <div className="share-box"><label className="field"><span className="label">공유용 요약</span><textarea className="input textarea" readOnly value={weeklyReport.shareText} /></label><button className="btn" type="button" onClick={() => copyText('weekly', weeklyReport.shareText, 'share_copy_weekly_report', { reportId: weeklyReport.reportId })}>{copied === 'weekly' ? '복사 완료' : '복사하기'}</button></div>
       </section>
 
-      <section className="section panel block stack" id="asset-timeline">
+      <section className="investor-deferred section panel block stack" id="asset-timeline">
         <div className="between"><div><p className="eyebrow">Asset Timeline</p><h2>종목별 추천 타임라인</h2></div><span className="chip chip-blue">차트 신호가 아니라 공개 콘텐츠 발언 시점입니다.</span></div>
         <label className="field compact"><span className="label">종목 선택</span><select className="select" value={assetFilter} onChange={e => changeAsset(e.target.value)}>{assetTimelines.map(item => <option value={item.ticker} key={item.ticker}>{item.name}</option>)}</select></label>
         <div className="asset-timeline">
@@ -401,15 +371,15 @@ export default function Page() {
       </section>
 
       <section className="section panel block stack" id="channel-request">
-        <div className="between"><div><p className="eyebrow">User Request Loop</p><h2>이 채널도 분석해주세요</h2></div><span className="chip chip-green">공유하면 우선순위</span></div>
-        <p className="muted">요청이 많은 채널은 Rookie 후보로 올리고 다음 리포트 우선순위에 반영합니다.</p>
+        <div className="between"><div><p className="eyebrow">채널 분석 요청</p><h2>이 채널도 분석해주세요</h2></div><span className="chip chip-green">요청 많은 순</span></div>
+        <p className="muted">요청이 많은 채널은 다음 확인 후보에 우선 반영합니다.</p>
         <div className="request-grid"><label className="field"><span className="label">채널명</span><input className="input" value={channelRequest.name} onChange={e => setChannelRequest({ ...channelRequest, name: e.target.value })} /></label><label className="field"><span className="label">YouTube URL</span><input className="input" type="url" value={channelRequest.url} onChange={e => setChannelRequest({ ...channelRequest, url: e.target.value })} /></label><button className="btn" type="button" onClick={submitChannelRequest}>분석 요청</button></div>
         {requestError && <span className="error">{requestError}</span>}
-        <div className="request-list">{requestedChannels.length === 0 ? <div className="empty">아직 로컬 요청이 없습니다. 관심 채널을 추가해 주세요.</div> : requestedChannels.map(item => <article className="card stack" key={item.id}><div className="between"><h3>{item.name}</h3><span className="chip chip-accent">{item.status}</span></div><p className="muted">요청 수 {item.votes} · {item.url}</p><p className="footer-note">이 투자 채널도 공개 발언 성과 분석 요청했습니다. 같이 요청하면 우선순위가 올라갑니다.</p></article>)}</div>
-        <div className="card"><p className="eyebrow">PMF Signals Preview</p><p className="muted">채널 요청, 공유 복사, 종목 타임라인 조회는 초기 PMF 신호로만 로컬 집계됩니다.</p><div className="row"><span className="chip">channel_request_submit {pmfSummary.channel_request_submit || 0}</span><span className="chip">share_copy_weekly_report {pmfSummary.share_copy_weekly_report || 0}</span><span className="chip">asset_timeline_change {pmfSummary.asset_timeline_change || 0}</span></div></div>
+        <div className="request-list">{requestedChannels.length === 0 ? <div className="empty">아직 요청이 없습니다. 관심 채널을 추가해 주세요.</div> : requestedChannels.map(item => <article className="card stack" key={item.id}><div className="between"><h3>{item.name}</h3><span className="chip chip-accent">{item.status}</span></div><p className="muted">요청 수 {item.votes} · {item.url}</p><p className="footer-note">이 채널도 종목 언급과 신뢰도를 보고 싶다고 요청했습니다.</p></article>)}</div>
+        <div className="card investor-deferred"><p className="eyebrow">PMF Signals Preview</p><p className="muted">채널 요청, 공유 복사, 종목 타임라인 조회는 초기 PMF 신호로만 로컬 집계됩니다.</p><div className="row"><span className="chip">channel_request_submit {pmfSummary.channel_request_submit || 0}</span><span className="chip">share_copy_weekly_report {pmfSummary.share_copy_weekly_report || 0}</span><span className="chip">asset_timeline_change {pmfSummary.asset_timeline_change || 0}</span></div></div>
       </section>
 
-      <section id="time-series" className="section panel block stack">
+      <section id="time-series" className="investor-deferred section panel block stack">
         <div className="between">
           <div><p className="eyebrow">3-month Timeline</p><h2>3개월 언급 추이</h2></div>
           <span className="chip chip-accent">지난 3개월 · {analysisWindow}</span>
@@ -426,7 +396,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section className="section panel block stack">
+      <section className="section panel block stack investor-deferred">
         <div className="between">
           <div><p className="eyebrow">Channel Comparison</p><h2>채널별 성과 비교</h2></div>
           <span className="chip">fixture cohort</span>
@@ -444,7 +414,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section id="performance-board" className="section panel block stack">
+      <section id="performance-board" className="investor-deferred section panel block stack">
         <div className="between">
           <div><p className="eyebrow">Performance Board</p><h2>추천일 종가 대비 최신가 성과</h2></div>
           <span className="chip chip-accent">0 live / {performances.length} fallback</span>
@@ -463,7 +433,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section id="content-filtering" className="section grid-2">
+      <section id="content-filtering" className="investor-deferred section grid-2">
         <div className="panel block stack">
           <div className="between"><div><p className="eyebrow">Content Filtering</p><h2>다채널 후보 검토</h2></div><span className="chip">필터/검색</span></div>
           <div className="grid-2">
@@ -487,7 +457,7 @@ export default function Page() {
         </div>
       </section>
 
-      <section id="review-queue" className="section panel block stack">
+      <section id="review-queue" className="investor-deferred section panel block stack">
         <div className="between"><div><p className="eyebrow">Review Queue</p><h2>사람이 확인해야 하는 항목</h2></div><span className="chip chip-red">derived from flags</span></div>
         <div className="grid-3">
           {filteredReviews.map(item => <article className="card stack" key={item.title}>
@@ -598,6 +568,39 @@ function ChannelHealthCard({ channel }) {
       <Kpi label="Missing" value={channel.missingTranscriptCount} desc={channel.statusRecommendation} />
     </div>
     {channel.latestUrl && <a className="btn secondary small anchor-link" href={channel.latestUrl} target="_blank" rel="noreferrer">원본 보기</a>}
+  </article>;
+}
+
+
+function InvestorPickCard({ card }) {
+  const positive = card.stance === '긍정';
+  const chipClass = positive ? 'chip-green' : card.stance === '부정' ? 'chip-red' : 'chip-blue';
+  return <article className="investor-pick-card stack">
+    <div className="between">
+      <div>
+        <p className="eyebrow">{card.source} · {card.publishedKstDate || '수집일 기준'}</p>
+        <h3>{card.asset} <span className="dim">{card.ticker}</span></h3>
+      </div>
+      <span className={`chip ${chipClass}`}>{card.stance}</span>
+    </div>
+    <div className="row"><span className="chip chip-accent">{card.claimType}</span><span className="chip">{card.market}</span><span className="chip">{card.timestamp}</span></div>
+    <div className="trust-meter" aria-label={`신뢰도 ${card.trustScore}점`}><span style={{ width: `${card.trustScore}%` }} /></div>
+    <div className="between"><strong>신뢰도: {card.trustLabel}</strong><span className="chip">{card.trustScore}/100</span></div>
+    <blockquote className="admin-quote">“{card.evidenceQuote}”</blockquote>
+    <ul className="reason-list compact-list">{card.trustReasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
+    <details className="performance-detail">
+      <summary>영상 근거 보기</summary>
+      <div className="performance-source"><span className="label">영상 제목</span><p>{card.videoTitle}</p><a className="btn secondary small anchor-link" href={card.videoUrl} target="_blank" rel="noreferrer">YouTube source</a></div>
+      <p className="card-disclaimer">공개 콘텐츠 발언 후보입니다. 투자 권유가 아니며, 성과 검증은 관리자 검수 후 별도 처리합니다.</p>
+    </details>
+  </article>;
+}
+
+function SourceTrustCard({ source }) {
+  return <article className="source-trust-card card stack">
+    <div className="between"><h3>{source.source}</h3><span className="chip chip-blue">오늘 {source.claimCandidates}개 언급</span></div>
+    <p className="muted">오늘 확인된 언급만 기준으로 계산했습니다.</p>
+    <div className="grid-2 mini-grid"><Kpi label="언급 종목" value={source.claimCandidates} desc="오늘 확인" /><Kpi label="평균 신뢰" value={source.avgTrust} desc={source.bestTrustLabel} /></div>
   </article>;
 }
 

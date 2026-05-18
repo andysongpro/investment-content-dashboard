@@ -668,3 +668,40 @@ p { line-height: 1.68; }
   .mobile-compact .performance-detail summary { min-height: 34px; padding: 0 12px; }
   .mobile-compact .journey-arrow { font-size: 11px; }
 }
+
+/* Investor-facing daily briefing */
+.investor-deferred { display: none !important; }
+.investor-dashboard, .source-trust-board { scroll-margin-top: 96px; }
+.investor-alert {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #dfe3e7;
+  border-radius: 20px;
+  background: var(--revolut-blue-soft);
+}
+.investor-alert.subtle { background: var(--revolut-surface); }
+.compact-list { gap: 6px; }
+.today-asset-strip { display: flex; gap: 8px; flex-wrap: wrap; }
+.investor-pick-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.investor-pick-card, .source-trust-card {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: #fff;
+  box-shadow: none;
+}
+.investor-pick-card h3 .dim { font-size: 14px; font-weight: 800; letter-spacing: 0; }
+.trust-meter { height: 9px; border-radius: 999px; background: var(--revolut-gray-100); overflow: hidden; }
+.trust-meter span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--orange), var(--accent)); }
+.source-trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+
+@media (max-width: 760px) {
+  #today-picks, #source-trust { scroll-margin-top: 112px; }
+  .mobile-compact .investor-pick-grid,
+  .mobile-compact .source-trust-grid { grid-template-columns: 1fr; gap: 8px; }
+  .mobile-compact .investor-pick-card,
+  .mobile-compact .source-trust-card,
+  .mobile-compact .investor-alert { padding: 11px; border-radius: 14px; }
+  .mobile-compact .today-asset-strip { gap: 6px; }
+}
