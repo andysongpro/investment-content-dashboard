@@ -152,6 +152,8 @@ const ingestionDashboard = {
           "발언 시점 확인됨"
         ],
         "evidenceQuote": "마이크론 테크놀로지의 그 기술 상승은",
+        "analysisSummary": "HBM 경쟁 구도에서 삼성전자의 대응 지연이 하이닉스·마이크론에 상대적 기회를 줬다는 맥락입니다. 다만 진행자는 정확히 확인된 사실이라기보다 시장에서 도는 설명이라고 선을 그어, 마이크론은 확정 추천보다 반도체/HBM 경쟁 구도 관찰 대상으로 보는 편이 안전합니다.",
+        "kickQuote": "하이닉스와 마이크론의 기술 상승은 결국 삼성전자 HBM 대응 지연에서 비롯됐다는 설이 있습니다.",
         "timestamp": "08:44",
         "videoTitle": "[LIVE 5월  18일 월요일 한국장전] 하락의 시작인가? 잠깐의 조정인가?",
         "videoUrl": "https://www.youtube.com/watch?v=eXsUBT8Am4k",
@@ -175,6 +177,8 @@ const ingestionDashboard = {
           "강한 표현이라 과장 가능성 확인 필요"
         ],
         "evidenceQuote": ">> 현대차 외수 많은 로봇주들 중 주목해",
+        "analysisSummary": "영상 제목은 현대차를 강하게 내세우지만, 해당 시점의 실제 대화는 로봇주 중 주목할 종목을 묻는 질문으로 이어집니다. 현대차 자체보다 로봇 산업 재평가와 레인보우로보틱스 등 로봇 밸류체인으로 화제가 이동하므로, 현대차 단독 추천으로 보기엔 문맥 신뢰도가 낮습니다.",
+        "kickQuote": "로봇주 중 주목해 볼 만한 종목이 있다면 무엇인가요?",
         "timestamp": "10:50",
         "videoTitle": "\"지금이 싸게 살 기회다\" 로봇 지금 '이 주식' 무식하게 모으세요. 곧 전세계 '1위 기업' 될 겁니다 (조진표 대표 / 3부)",
         "videoUrl": "https://www.youtube.com/watch?v=_6YBGPQh_U4",
@@ -197,6 +201,8 @@ const ingestionDashboard = {
           "발언 시점 확인됨"
         ],
         "evidenceQuote": "기회를 삼성전자가 안 줄까요? 만약에",
+        "analysisSummary": "삼성전자는 지금 당장 추격 매수하기보다 눌림 기회를 기다리자는 취지입니다. 단기 과열과 5일선 이격을 경계하면서도 장기 추세가 무너진 것은 아니며 조정이 오면 다시 접근할 수 있다는 관찰 의견에 가깝습니다.",
+        "kickQuote": "기회를 삼성전자가 안 줄까요? 반드시 줍니다.",
         "timestamp": "04:29",
         "videoTitle": "지금 언제든지 폭락장 올 수 있어요, 외국인이 한국 주식 싹다 파는 이유 (윤타 대표)",
         "videoUrl": "https://www.youtube.com/watch?v=Rep1w184x_k",
@@ -220,6 +226,8 @@ const ingestionDashboard = {
           "다른 투자자 포트폴리오 해설 가능성"
         ],
         "evidenceQuote": "상승했습니다. 엔비디아의 주가 차트를",
+        "analysisSummary": "엔비디아는 박스권 돌파 이후 강한 흐름을 유지하고 있으며 200달러 지지선과 20일 실적 발표가 핵심 변수로 제시됩니다. 기대가 큰 만큼 실망 위험도 있지만, 눌렸던 구간 대비 상승 여력이 남아 있어 관심 있게 볼 대상으로 분류됩니다.",
+        "kickQuote": "박스권을 뚫자마자 급등이 나왔고 이제는 200달러가 지지선이 됐습니다.",
         "timestamp": "03:25",
         "videoTitle": "변심한 투자 대가들의 계좌 공개! (워런버핏, 드러켄밀러, 피터틸, 빌애크먼, 국민연금)",
         "videoUrl": "https://www.youtube.com/watch?v=e8J2wNyVC4s",
@@ -244,6 +252,8 @@ const ingestionDashboard = {
           "강한 표현이라 과장 가능성 확인 필요"
         ],
         "evidenceQuote": ">> 삼성전자 SK 사도 되나요? 막",
+        "analysisSummary": "삼성전자와 SK하이닉스 매수 가능성을 묻는 질문에서 시작하지만, 답변은 특정 종목의 단기 매수가보다 AI·신기술이라는 큰 산업 파동을 봐야 한다는 방향으로 전개됩니다. 삼성전자는 직접 추천이라기보다 반도체 대형주를 신대륙 산업 관점에서 보는 맥락입니다.",
+        "kickQuote": "삼성전자 SK 사도 되나요? 어디까지 올라가나요?",
         "timestamp": "10:29",
         "videoTitle": "📈 앞으로 어떻게 투자를 해야 할까? | 코스피 1만 투자지도ㅣ효라클님ㅣ특별한 만남",
         "videoUrl": "https://www.youtube.com/watch?v=mRRev963GaA",
@@ -268,6 +278,8 @@ const ingestionDashboard = {
           "강한 표현이라 과장 가능성 확인 필요"
         ],
         "evidenceQuote": "하이닉스 지금 사도 되나요? 이런",
+        "analysisSummary": "SK하이닉스 역시 단기 가격 논쟁보다 AI·반도체 산업의 큰 변화 속에서 바라봐야 한다는 메시지입니다. “지금 사도 되나”라는 질문은 큰 파도 속 특정 지점만 확대해 보는 행위라는 설명이라, 단기 매수 신호보다는 산업 사이클 관찰로 해석하는 것이 적절합니다.",
+        "kickQuote": "큰 파도가 있으면 특정 부분에 돋보기를 갖다 대고 보고 있는 겁니다.",
         "timestamp": "47:37",
         "videoTitle": "📈 앞으로 어떻게 투자를 해야 할까? | 코스피 1만 투자지도ㅣ효라클님ㅣ특별한 만남",
         "videoUrl": "https://www.youtube.com/watch?v=mRRev963GaA",
@@ -292,6 +304,8 @@ const ingestionDashboard = {
           "다른 투자자 포트폴리오 해설 가능성"
         ],
         "evidenceQuote": "아마존도 전략 매도했습니다. 새롭게",
+        "analysisSummary": "아마존은 드러켄밀러 포트폴리오 변화 해설에서 전략 매도된 종목으로 언급됩니다. 진행자의 자체 부정 전망이라기보다 대가의 보유 종목 조정 사례이므로, 신뢰도는 포트폴리오 참고 신호 수준입니다.",
+        "kickQuote": "구글, 도큐사인, 아마존도 전략 매도했습니다.",
         "timestamp": "12:35",
         "videoTitle": "변심한 투자 대가들의 계좌 공개! (워런버핏, 드러켄밀러, 피터틸, 빌애크먼, 국민연금)",
         "videoUrl": "https://www.youtube.com/watch?v=e8J2wNyVC4s",
@@ -316,6 +330,8 @@ const ingestionDashboard = {
           "다른 투자자 포트폴리오 해설 가능성"
         ],
         "evidenceQuote": "매수한 샌디스크의 주가 차트를 보면",
+        "analysisSummary": "샌디스크는 드러켄밀러가 새롭게 매수한 반도체 종목으로 소개됩니다. 이미 큰 폭으로 오른 뒤에도 추가 상승을 기대해 매수했다는 맥락이지만, 진행자의 직접 추천이 아니라 유명 투자자 포트폴리오 해설입니다.",
+        "kickQuote": "많이 올랐다고 생각했는데 드러켄밀러는 더 갈 거라고 보고 매수를 진행했습니다.",
         "timestamp": "12:38",
         "videoTitle": "변심한 투자 대가들의 계좌 공개! (워런버핏, 드러켄밀러, 피터틸, 빌애크먼, 국민연금)",
         "videoUrl": "https://www.youtube.com/watch?v=e8J2wNyVC4s",
@@ -340,6 +356,8 @@ const ingestionDashboard = {
           "다른 투자자 포트폴리오 해설 가능성"
         ],
         "evidenceQuote": "주가 차트를 보면 애플이 하락할 때",
+        "analysisSummary": "애플은 AI 보안 이슈와 함께 약점이 드러난 사례로 언급되며, 같은 국면에서 사이버보안 기업들이 상대적 수혜를 볼 수 있다는 비교 맥락입니다. 애플 단독 회피 신호라기보다 AI 보안 테마 내 포지션 점검 메시지에 가깝습니다.",
+        "kickQuote": "애플이 하락할 때 소프트웨어 기업인 팔로알토는 급등했습니다.",
         "timestamp": "06:06",
         "videoTitle": "변심한 투자 대가들의 계좌 공개! (워런버핏, 드러켄밀러, 피터틸, 빌애크먼, 국민연금)",
         "videoUrl": "https://www.youtube.com/watch?v=e8J2wNyVC4s",
@@ -364,6 +382,8 @@ const ingestionDashboard = {
           "다른 투자자 포트폴리오 해설 가능성"
         ],
         "evidenceQuote": "매도했고요. 구글, 도쿄 사인",
+        "analysisSummary": "구글은 드러켄밀러 포트폴리오에서 전략 매도된 종목 중 하나로 언급됩니다. 진행자의 직접적인 부정 분석보다는 유명 투자자 수급 변화 해설이므로, 매도·회피 판단 전 추가 확인이 필요합니다.",
+        "kickQuote": "구글, 도큐사인, 아마존도 전략 매도했습니다.",
         "timestamp": "12:33",
         "videoTitle": "변심한 투자 대가들의 계좌 공개! (워런버핏, 드러켄밀러, 피터틸, 빌애크먼, 국민연금)",
         "videoUrl": "https://www.youtube.com/watch?v=e8J2wNyVC4s",

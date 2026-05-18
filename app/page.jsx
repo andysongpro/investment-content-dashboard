@@ -584,14 +584,20 @@ function InvestorPickCard({ card }) {
       <span className={`chip ${chipClass}`}>{card.stance}</span>
     </div>
     <div className="row"><span className="chip chip-accent">{card.claimType}</span><span className="chip">{card.market}</span><span className="chip">{card.timestamp}</span></div>
-    <div className="trust-meter" aria-label={`신뢰도 ${card.trustScore}점`}><span style={{ width: `${card.trustScore}%` }} /></div>
-    <div className="between"><strong>신뢰도: {card.trustLabel}</strong><span className="chip">{card.trustScore}/100</span></div>
-    <blockquote className="admin-quote">“{card.evidenceQuote}”</blockquote>
-    <ul className="reason-list compact-list">{card.trustReasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
+    <div className="pick-analysis-block">
+      <span className="label">종목 분석 요약</span>
+      <p>{card.analysisSummary}</p>
+    </div>
+    <blockquote className="kick-quote">“{card.kickQuote || card.evidenceQuote}”</blockquote>
+    <div className="trust-block">
+      <div className="trust-meter" aria-label={`신뢰도 ${card.trustScore}점`}><span style={{ width: `${card.trustScore}%` }} /></div>
+      <div className="between trust-row"><strong>신뢰도: {card.trustLabel}</strong><span className="chip">{card.trustScore}/100</span></div>
+      <ul className="reason-list compact-list">{card.trustReasons.map(reason => <li key={reason}>{reason}</li>)}</ul>
+    </div>
     <details className="performance-detail">
       <summary>영상 근거 보기</summary>
       <div className="performance-source"><span className="label">영상 제목</span><p>{card.videoTitle}</p><a className="btn secondary small anchor-link" href={card.videoUrl} target="_blank" rel="noreferrer">YouTube source</a></div>
-      <p className="card-disclaimer">공개 콘텐츠 발언 후보입니다. 투자 권유가 아니며, 성과 검증은 관리자 검수 후 별도 처리합니다.</p>
+      <p className="card-disclaimer">핵심 코멘트는 원문 일부만 강조한 것이며, 위 요약은 전후 문맥을 함께 반영했습니다. 투자 권유가 아닙니다.</p>
     </details>
   </article>;
 }
@@ -600,7 +606,10 @@ function SourceTrustCard({ source }) {
   return <article className="source-trust-card card stack">
     <div className="between"><h3>{source.source}</h3><span className="chip chip-blue">오늘 {source.claimCandidates}개 언급</span></div>
     <p className="muted">오늘 확인된 언급만 기준으로 계산했습니다.</p>
-    <div className="grid-2 mini-grid"><Kpi label="언급 종목" value={source.claimCandidates} desc="오늘 확인" /><Kpi label="평균 신뢰" value={source.avgTrust} desc={source.bestTrustLabel} /></div>
+    <div className="source-trust-metrics">
+      <div><span className="label">언급 종목</span><strong>{source.claimCandidates}</strong><small>오늘 확인</small></div>
+      <div><span className="label">평균 신뢰</span><strong>{source.avgTrust}</strong><small>{source.bestTrustLabel}</small></div>
+    </div>
   </article>;
 }
 

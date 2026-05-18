@@ -165,13 +165,13 @@ test('investor briefing exposes today picks, trust score, and admin-deferred gua
   const css = read('app/globals.css');
   const fixture = read('data/ingestionDashboardFixtures.js');
   const plan = read('docs/ingestion-dashboard-ux-plan.md');
-  for (const text of ['investorDashboard', 'Daily Investor Briefing', '오늘 나온 종목 언급', 'InvestorPickCard', '신뢰도:', 'SourceTrustCard', '출처별 신뢰도 요약', '투자 권유가 아닙니다']) {
+  for (const text of ['investorDashboard', 'Daily Investor Briefing', '오늘 나온 종목 언급', 'InvestorPickCard', '종목 분석 요약', 'kick-quote', '신뢰도:', 'SourceTrustCard', '출처별 신뢰도 요약', '투자 권유가 아닙니다']) {
     assert(app.includes(text), `missing investor briefing text ${text}`);
   }
-  for (const text of ['investor-pick-grid', 'source-trust-grid', 'trust-meter', 'investor-deferred', '#today-picks']) {
+  for (const text of ['investor-pick-grid', 'source-trust-grid', 'trust-meter', 'pick-analysis-block', 'kick-quote', 'source-trust-metrics', 'investor-deferred', '#today-picks']) {
     assert(css.includes(text), `missing investor briefing CSS ${text}`);
   }
-  for (const text of ['publicInvestorDashboard', 'recommendationCards', 'trustScore', 'trustReasons', 'adminDeferred', 'content-pick-extraction-v0.1']) {
+  for (const text of ['publicInvestorDashboard', 'recommendationCards', 'analysisSummary', 'kickQuote', 'trustScore', 'trustReasons', 'adminDeferred', 'content-pick-extraction-v0.1']) {
     assert(fixture.includes(text), `missing investor fixture ${text}`);
   }
   for (const text of ['후보와 검증 분리', 'Transcript 결손 감시', 'Revolut-inspired']) {
