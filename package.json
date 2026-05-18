@@ -7,7 +7,11 @@
     "start": "npx serve@latest out --listen 3000",
     "test": "node tests/smoke.js && node tests/league-scoring.test.js && node tests/admin-ops.test.js",
     "test:admin": "node tests/admin-ops.test.js && node tests/admin-smoke.js",
-    "scrape:seed": "node scripts/scrape-youtube-seed.js"
+    "test:ingestion": "python3 -m unittest tests/test_ingestion_py.py",
+    "scrape:seed": "node scripts/scrape-youtube-seed.js",
+    "ingest:dry-run": "python3 scripts/ingest_investment_content.py --mode youtube-discovery --dry-run --print-summary",
+    "ingest:transcripts": "python3 scripts/run_daily_youtube_transcripts.py --print-summary",
+    "ingest:extract-claims": "python3 scripts/extract_claim_candidates.py --run-dir ${RUN_DIR:-data/ingestion_runs/$(date -u +%F)/today-28-channels-combined} --print-summary"
   },
   "dependencies": {
     "next": "latest",

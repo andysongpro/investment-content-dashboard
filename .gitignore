@@ -34,3 +34,7 @@ dogfood-output/
 playwright-report/
 test-results/
 coverage/
+__pycache__/
+*.py[cod]
+data/ingestion_runs/
+data/channel_health_state.json

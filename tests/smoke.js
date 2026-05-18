@@ -155,6 +155,25 @@ test('PMF League OS sections, fixtures, and guardrails are present', () => {
   for (const forbidden of ['AI 추천주', '수익 보장', '매수 신호']) assert(!app.includes(forbidden), `forbidden copy ${forbidden}`);
 });
 
+test('ingestion results dashboard exposes daily run, claim triage, and transcript health guardrails', () => {
+  const app = read('app/page.jsx');
+  const css = read('app/globals.css');
+  const fixture = read('data/ingestionDashboardFixtures.js');
+  const plan = read('docs/ingestion-dashboard-ux-plan.md');
+  for (const text of ['ingestionDashboard', 'Daily Ingestion OS', '오늘 수집 결과 상황판', 'Claim Candidate Triage', 'Channel Transcript Health', 'needs_human_review', '반복 결손 루틴', '투자 권유가 아닙니다']) {
+    assert(app.includes(text), `missing ingestion dashboard text ${text}`);
+  }
+  for (const text of ['claim-card-grid', 'channel-health-grid', 'operator-rail', 'needs-attention', '#ingestion-results']) {
+    assert(css.includes(text), `missing ingestion dashboard CSS ${text}`);
+  }
+  for (const text of ['trackedChannels', 'claimCandidates', 'transcriptSegmentsTotal', 'channelHealthAlgorithmVersion', 'content-pick-extraction-v0.1', 'channel-health-v0.1']) {
+    assert(fixture.includes(text), `missing ingestion fixture ${text}`);
+  }
+  for (const text of ['후보와 검증 분리', 'Transcript 결손 감시', 'Revolut-inspired']) {
+    assert(plan.includes(text), `missing UX plan ${text}`);
+  }
+});
+
 test('admin prototype route includes compact hero, planned IA, and fixtures', () => {
   const admin = read('app/admin/page.jsx');
   const fixtures = read('data/adminFixtures.js');

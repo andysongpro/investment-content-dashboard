@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from 'react';
 import leagueFixtures from '../data/leagueFixtures';
 import weeklyFixtures from '../data/weeklyReportFixtures';
 import timelineFixtures from '../data/assetTimelineFixtures';
+import ingestionDashboard from '../data/ingestionDashboardFixtures';
 import pmfEvents from '../lib/pmfEvents';
 
 const STORAGE_KEY = 'investment-content-dashboard/source-draft';
@@ -232,6 +233,7 @@ export default function Page() {
         </div>
         <nav className="mobile-sticky-nav" aria-label="모바일 섹션 바로가기">
           <a href="#top">요약</a>
+          <a href="#ingestion-results">수집</a>
           <a href="#performance-board">성과</a>
           <a href="#league-board">리그</a>
           <a href="#weekly-report">리포트</a>
@@ -253,9 +255,9 @@ export default function Page() {
             <p className="muted mobile-only">공개 투자 콘텐츠 발언을 기록하고, 추천일 종가 대비 성과를 검증합니다. 투자 권유가 아닙니다.</p>
           </div>
           <div className="grid-3">
-            <Kpi label="Channels" value={sourceChannels.length} desc="김작가 TV, 신사임당" />
-            <Kpi label="Candidates" value={totalCandidates} desc="지난 3개월 후보 영상" />
-            <Kpi label="Analyzed" value={totalAnalyzed} desc="우선 분석 영상" />
+            <Kpi label="Channels" value={ingestionDashboard.summary.trackedChannels} desc="오늘 추적 채널" />
+            <Kpi label="Candidates" value={ingestionDashboard.summary.claimCandidates} desc="claim 후보" />
+            <Kpi label="Analyzed" value={ingestionDashboard.summary.contentItems} desc="오늘 수집 영상" />
           </div>
           <div className="row">
             <a className="btn anchor-link" href="#time-series">3개월</a>
@@ -287,8 +289,61 @@ export default function Page() {
       <section className="section kpi">
         <Kpi label="Include" value={contents.filter(x => x.status === 'include').length} desc="포함 후보" />
         <Kpi label="Maybe" value={contents.filter(x => x.status === 'maybe').length} desc="보류 후보" />
-        <Kpi label="Review Queue" value={reviewItems.length} desc="수동 확인 필요" />
+        <Kpi label="Review Queue" value={ingestionDashboard.summary.reviewQueueItems} desc="오늘 검수 큐" />
         <Kpi label="Assets" value="12" desc="자산/테마 수" />
+      </section>
+
+      <section id="ingestion-results" className="section panel block stack ingestion-dashboard">
+        <div className="between">
+          <div>
+            <p className="eyebrow">Daily Ingestion OS</p>
+            <h2>오늘 수집 결과 상황판</h2>
+          </div>
+          <span className="chip chip-accent">{ingestionDashboard.runLabel}</span>
+        </div>
+        <p className="muted">28개 YouTube 채널을 채널별 1개씩 수집한 운영 대시보드입니다. title-only seed, transcript-ready candidate, claim candidate는 분리 표시하며 투자 권유가 아닙니다.</p>
+        <div className="ingestion-metadata">
+          <span className="chip">{ingestionDashboard.claimAlgorithmVersion}</span>
+          <span className="chip">{ingestionDashboard.channelHealthAlgorithmVersion}</span>
+          <span className="chip chip-orange">{ingestionDashboard.dataStatus}</span>
+        </div>
+        <div className="grid-4 ingestion-kpis">
+          <Kpi label="Tracked" value={ingestionDashboard.summary.trackedChannels} desc="활성 채널" />
+          <Kpi label="Content" value={ingestionDashboard.summary.contentItems} desc="채널별 1개" />
+          <Kpi label="Transcript" value={`${ingestionDashboard.summary.itemsWithTranscript}/${ingestionDashboard.summary.contentItems}`} desc={`${ingestionDashboard.summary.transcriptSegmentsTotal.toLocaleString('ko-KR')} segments`} />
+          <Kpi label="Claims" value={ingestionDashboard.summary.claimCandidates} desc="검수 전 후보" />
+        </div>
+
+        <div className="ingestion-layout">
+          <div className="stack">
+            <div className="between"><h3>Claim Candidate Triage</h3><span className="chip chip-blue">needs_human_review</span></div>
+            <div className="claim-card-grid">
+              {ingestionDashboard.claimCards.map(claim => <ClaimCandidateCard claim={claim} key={claim.claimId} />)}
+            </div>
+          </div>
+
+          <aside className="stack operator-rail">
+            <div className="card stack">
+              <div className="between"><h3>운영 우선순위</h3><span className="chip chip-red">검수</span></div>
+              <ol className="reason-list">
+                <li><strong>Transcript 없는 2개</strong><span className="muted">삼프로TV, DB증권 더블 먼저 확인</span></li>
+                <li><strong>Claim 후보 10개</strong><span className="muted">evidence quote와 timestamp 검수</span></li>
+                <li><strong>반복 결손 루틴</strong><span className="muted">누적 결손 시 제외 후보 등록</span></li>
+              </ol>
+            </div>
+            <div className="card stack">
+              <h3>UX 원칙</h3>
+              {ingestionDashboard.uxPrinciples.map(item => <p className="muted" key={item}>{item}</p>)}
+            </div>
+          </aside>
+        </div>
+
+        <div className="stack">
+          <div className="between"><h3>Channel Transcript Health</h3><span className="chip">exclusion candidates: {ingestionDashboard.summary.exclusionCandidates}</span></div>
+          <div className="channel-health-grid">
+            {ingestionDashboard.channelHealth.slice(0, 12).map(channel => <ChannelHealthCard channel={channel} key={channel.channelName} />)}
+          </div>
+        </div>
       </section>
 
       <section className="section panel block stack" id="league-board">
@@ -488,6 +543,61 @@ function PerformanceSummaryCard({ item, featured, channelLabel }) {
       </div>
       <p className="card-disclaimer">공개 콘텐츠 발언 기준 · 투자 권유가 아닙니다.</p>
     </details>
+  </article>;
+}
+
+const claimTypeLabels = {
+  positive_watchlist: '긍정 관찰',
+  negative_avoid: '부정/회피',
+  explicit_recommendation: '명시 추천',
+  neutral_mention: '중립 언급',
+};
+
+const stanceUiLabels = {
+  bullish: '긍정',
+  bearish: '부정',
+  neutral: '중립',
+};
+
+function ClaimCandidateCard({ claim }) {
+  const stanceClass = claim.stance === 'bearish' ? 'chip-red' : claim.stance === 'bullish' ? 'chip-green' : 'chip-blue';
+  return <article className="claim-candidate-card stack">
+    <div className="between">
+      <div>
+        <p className="eyebrow">{claim.channelName}</p>
+        <h3>{claim.assetName} <span className="dim">{claim.ticker}</span></h3>
+      </div>
+      <span className={`chip ${stanceClass}`}>{stanceUiLabels[claim.stance] || claim.stance}</span>
+    </div>
+    <div className="row"><span className="chip">{claim.market}</span><span className="chip chip-accent">{claimTypeLabels[claim.claimType] || claim.claimType}</span><span className="chip">{claim.timestamp || 'timestamp 확인'}</span></div>
+    <blockquote className="admin-quote">“{claim.evidenceQuote}”</blockquote>
+    <details className="performance-detail">
+      <summary>근거 영상 보기</summary>
+      <div className="performance-source">
+        <span className="label">근거 콘텐츠</span>
+        <p>{claim.contentTitle}</p>
+        <a className="btn secondary small anchor-link" href={claim.url} target="_blank" rel="noreferrer">YouTube source</a>
+        <small>{claim.reviewStatus} · {claim.algorithmVersion}</small>
+      </div>
+      <p className="card-disclaimer">후보 추출 단계입니다. 사람 검수 전에는 verified claim, 성과, 리그 점수에 반영하지 않습니다.</p>
+    </details>
+  </article>;
+}
+
+function ChannelHealthCard({ channel }) {
+  const missing = channel.missingTranscriptCount > 0;
+  return <article className={`channel-health-card ${missing ? 'needs-attention' : ''}`}>
+    <div className="between">
+      <h3>{channel.channelName}</h3>
+      <span className={`chip ${missing ? 'chip-red' : 'chip-green'}`}>{missing ? 'transcript 없음' : 'transcript 확보'}</span>
+    </div>
+    <p className="muted">{channel.latestTitle}</p>
+    <div className="grid-3 mini-grid">
+      <Kpi label="Segments" value={channel.segments.toLocaleString('ko-KR')} desc="timestamp" />
+      <Kpi label="Claims" value={channel.claimCandidates} desc="후보" />
+      <Kpi label="Missing" value={channel.missingTranscriptCount} desc={channel.statusRecommendation} />
+    </div>
+    {channel.latestUrl && <a className="btn secondary small anchor-link" href={channel.latestUrl} target="_blank" rel="noreferrer">원본 보기</a>}
   </article>;
 }
 
