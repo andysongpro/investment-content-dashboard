@@ -54,10 +54,10 @@ test('investor page removes admin review actions from visible navigation', () =>
 test('investor page explains today-date problem and avoids premature performance claims', () => {
   const app = read('app/page.jsx');
   const fixture = read('data/ingestionDashboardFixtures.js');
-  assert(app.includes('2026-05-18 KST'));
+  assert(app.includes('2026-05-19 KST'));
   assert(app.includes('당일/전일 영상은 아직 성과 검증 대상이 아닙니다'));
-  assert(fixture.includes('기존 사용자 화면에 2026-05-05 샘플 성과와 2026-05-18 실제 수집 결과가 섞여 있었습니다'));
-  assert(fixture.includes('투자자 화면에 transcript health, exclusion candidate, 운영 우선순위 같은 관리자 정보가 노출되어 있었습니다'));
+  assert(fixture.includes('기존 사용자 화면에 2026-05-05 샘플 성과와 2026-05-19 실제 수집 결과가 섞일 수 있어'));
+  assert(fixture.includes('투자자 화면에는 transcript health, exclusion candidate, 운영 우선순위 같은 관리자 정보를 직접 노출하지 않습니다'));
 });
 
 test('performance board uses numeric summary card information design', () => {
@@ -103,7 +103,7 @@ test('mobile compact mode shortens labels, reduces spacing, and hides nonessenti
   assert(css.includes('.mobile-compact .grid-4'));
   assert(css.includes('.mobile-compact .report-grid'));
   assert(css.includes('.mobile-compact .league-grid'));
-  for (const text of ['2026-05-18 KST', '종목 우선', '출처는 근거 레이어', '종목 우선순위 보기', '출처 신뢰도']) {
+  for (const text of ['2026-05-19 KST', '종목 우선', '출처는 근거 레이어', '종목 우선순위 보기', '출처 신뢰도']) {
     assert(app.includes(text), `missing compact copy ${text}`);
   }
   for (const text of ['상황판', '소스', '콘텐츠', '검수', '리그', '리포트', '알고리즘', 'PMF', '로그']) {
@@ -207,7 +207,7 @@ test('multi-channel and three-month timeline expansion includes Sinsa-imdang wit
   const css = read('app/globals.css');
   assert(app.includes('신사임당'));
   assert(app.includes('지난 3개월'));
-  assert(app.includes('2026-05-18 수집분'));
+  assert(app.includes('2026-05-19 수집분'));
   assert(app.includes('channelSummaries'));
   assert(app.includes('monthlyTrend'));
   assert(app.includes('채널별 성과 비교'));

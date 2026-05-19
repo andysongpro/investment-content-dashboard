@@ -16,8 +16,8 @@ const { assetTimelines } = timelineFixtures;
 const { publicInvestorDashboard: investorDashboard } = ingestionDashboard;
 const { getEvents, recordEvent, summarizeEvents } = pmfEvents;
 
-const analysisWindow = '2026-05-18 수집분';
-const latestFixtureSync = '2026-05-18 17:07 KST';
+const analysisWindow = '2026-05-19 수집분';
+const latestFixtureSync = '2026-05-19 22:03 UTC / 2026-05-20 07:03 KST';
 
 const defaultSource = {
   name: '김작가 TV + 신사임당',
@@ -245,7 +245,7 @@ export default function Page() {
       <section className="hero panel panel-strong block stock-first-hero">
         <div className="stack">
           <div className="row">
-            <span className="chip chip-accent">2026-05-18 KST</span>
+            <span className="chip chip-accent">2026-05-19 KST</span>
             <span className="chip chip-green">종목 우선</span>
             <span className="chip">출처는 근거 레이어</span>
           </div>
